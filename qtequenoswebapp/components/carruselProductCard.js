@@ -46,10 +46,12 @@ export default function CarruselProductCard({products}) {
             <SplideTrack className='w-[30rem] h-[25rem] mx-auto '>
                 {   
                     products &&(products.map(productView =>(
-                        <SplideSlide className=''>
+                        <SplideSlide
+                            key={productView.id}
+                        >
                             <ProductCard
-                                productView={productView}
                                 key={productView.id}
+                                productView={productView}                                
                             />
                         </SplideSlide>
                     )))

@@ -9,11 +9,11 @@ import CarruselProductCard from "@/components/carruselProductCard";
 
 export default function Home() {
   let productsFlavors = [
-    {"id":"1","imagen":"/img/tequenosQueso.png","titulo":"queso","precio":"10,00","url":"https://api.whatsapp.com/send/?phone=584122121462&text=Hola%20Ym2%20papelería%20quisiera%20mas%20información%20sobre%20estuche%20triangular%20safari%20exodus%20a19%20https://ibb.co/8smQ7v1"}
+    {"id":1,"imagen":"/img/tequenosQueso.png","titulo":"queso","precio":"10,00","url":"https://api.whatsapp.com/send/?phone=584122121462&text=Hola%20Ym2%20papelería%20quisiera%20mas%20información%20sobre%20estuche%20triangular%20safari%20exodus%20a19%20https://ibb.co/8smQ7v1"}
     ,    
-    {"id":"2","imagen":"/img/tequenosQueso.png","titulo":"queso y guayaba","precio":"12,00","url":"https://api.whatsapp.com/send/?phone=584122121462&text=Hola%20Ym2%20papelería%20quisiera%20mas%20información%20sobre%20cava%20morral%20kavak%20relax%20https://ibb.co/drM7DDQ"}
+    {"id":2,"imagen":"/img/tequenosQueso.png","titulo":"queso y guayaba","precio":"12,00","url":"https://api.whatsapp.com/send/?phone=584122121462&text=Hola%20Ym2%20papelería%20quisiera%20mas%20información%20sobre%20cava%20morral%20kavak%20relax%20https://ibb.co/drM7DDQ"}
     ,
-    {"id":"3","imagen":"/img/tequenosQueso.png","titulo":"chocolate","precio":"10,50","url":"https://api.whatsapp.com/send/?phone=584122121462&text=Hola%20Ym2%20papelería%20quisiera%20mas%20información%20sobre%20bolso%20sport%20safari%20exodus%20a1918%20https://ibb.co/0MMCMNb"}
+    {"id":3,"imagen":"/img/tequenosQueso.png","titulo":"chocolate","precio":"10,50","url":"https://api.whatsapp.com/send/?phone=584122121462&text=Hola%20Ym2%20papelería%20quisiera%20mas%20información%20sobre%20bolso%20sport%20safari%20exodus%20a1918%20https://ibb.co/0MMCMNb"}
     ,
   ];
 
@@ -67,13 +67,13 @@ export default function Home() {
             </p>
           </div>
           <div className=" col-span-2">
-            <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover'/>
+            <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover' alt="foto referencial de tequeños"/>
           </div>
         </div>        
         {/* descripción 2*/}
         <div className="grid grid-cols-4">
           <div className=" col-span-2">
-            <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover'/>
+            <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover' alt="foto referencial de tequeños"/>
           </div>
           <div className=" col-span-2 pr-[29%] pl-10 py-10 grid content-center">
             <p className=" text-xl text-gray-800">
@@ -110,7 +110,7 @@ export default function Home() {
             </button>
           </div>
           <div className=" col-span-2">
-            <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover'/>
+            <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover' alt="foto referencial de tequeños"/>
           </div>
         </div> 
       </Layout>
