@@ -23,13 +23,13 @@ export default function CarruselMain() {
         hasTrack={ false }
       >
         <div style={ { position: 'relative' } } className='lg:z-10'>
-          <SplideTrack>
+          <SplideTrack className='h-[20rem] lg:h-auto'>
             <SplideSlide>
                 <div className='relative'>
-                  <Image width={1080} height={720} src="https://i.postimg.cc/gcq2DcLD/Firefly-20231108062047.png" className='object-none h-full w-full lg:w-screen lg:h-full lg:object-cover object-left-top' alt="Image 1"/>
-                  <div className='absolute top-0 left-0 w-screen h-[80%]'>
-                    <div className=' px-5 mx-auto lg:w-9/12 h-full grid grid-cols-4'> 
-                      <div className=' col-span-2 grid content-center space-y-4'>                        
+                  <Image width={1080} height={720} src="https://i.postimg.cc/gcq2DcLD/Firefly-20231108062047.png" className='h-[20rem] lg:w-screen lg:h-full object-cover object-right-top' alt="Image 1"/>
+                  <div className='absolute top-0 left-0 w-screen lg:h-[80%]'>
+                    <div className=' px-5 mx-auto lg:w-9/12 lg:h-full grid grid-cols-1 lg:grid-cols-4'> 
+                      <div className=' col-span-2 hidden lg:grid content-center space-y-4'>                        
                       </div>
                       <div className='col-span-2 grid content-center'>
                         <Image width={1080} height={720} src="https://i.postimg.cc/CK5tn5CK/logo-qtequenos.webp" className='object-cover w-[70%] flex justify-self-center' alt="Image 1"/>

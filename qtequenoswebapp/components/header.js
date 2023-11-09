@@ -17,10 +17,6 @@ export default function Header() {
                             </svg>
                         </button>
                     </div>
-                    <div className="flex items-center md:order-2 lg:hidden">
-                        <a href="#" className="text-gray-800 dark:text-white border-2 border-[#c21a7f] hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 mr-1 md:mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Acceder</a>
-                        <a href="#" className="text-white bg-[#c21a7f] hover:bg-[#970b5f] border-2 border-[#c21a7f] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 mr-1 md:mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Registrase</a>
-                    </div>
                     <div id="mega-menu-icons" className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
                         <ul className="flex flex-col mt-4 font-medium md:flex-row md:space-x-8 md:mt-0">
                             <li>

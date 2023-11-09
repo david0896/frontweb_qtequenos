@@ -43,7 +43,7 @@ export default function CarruselProductCard({products}) {
         aria-labelledby="autoplay-example-heading"
         hasTrack={ false }
         >
-            <SplideTrack className='w-[30rem] h-[25rem] mx-auto '>
+            <SplideTrack className='w-[30rem] h-[25rem] mx-auto'>
                 {   
                     products &&(products.map(productView =>(
                         <SplideSlide

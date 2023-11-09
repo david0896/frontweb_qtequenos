@@ -25,9 +25,9 @@ export default function Home() {
       >
         <CarruselMain/>
         {/* seccion uno sabores */}
-        <div className="px-5 mt-10 mx-auto lg:w-9/12">
-          <div className="grid grid-cols-5">
-            <div className=" col-span-2 pb-10">
+        <div className="px-5 mt-10 mx-auto lg:w-9/12 overflow-hidden lg:overflow-visible">
+          <div className="grid grid-cols-1 lg:grid-cols-5">
+            <div className="lg:col-span-2 pb-10">
               <h1 className=" text-5xl my-10 uppercase text-[#f5884d] font-bold">Sabores 
                 <span className="text-[#c21a7f] block">que </span>
                 <span className="text-[#c21a7f] ">provocan </span>
@@ -41,7 +41,7 @@ export default function Home() {
               y placer culinario
               </p>
             </div>
-            <div className="col-span-3 p-10 w-[42rem] mx-auto">
+            <div className="lg:col-span-3 p-10 -ml-[4rem] lg:ml-0 w-[42rem] mx-auto">
               <CarruselProductCard
                 products={productsFlavors}
               />
@@ -55,8 +55,8 @@ export default function Home() {
           </div>
         </div>
         {/* descripción 1*/}
-        <div className="grid grid-cols-4">
-          <div className=" col-span-2 pl-[29%] pr-10 py-10 grid content-center">
+        <div className="grid grid-cols-1 lg:grid-cols-4">
+          <div className=" col-span-2 px-4 lg:pl-[29%] lg:pr-10 py-10 grid lg:content-center">
             <p className=" text-xl text-gray-800">
               Nos apasionamos por 
               llevar a tu mesa los 
@@ -69,9 +69,25 @@ export default function Home() {
           <div className=" col-span-2">
             <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover' alt="foto referencial de tequeños"/>
           </div>
-        </div>        
+        </div>   
+        {/* descripción 2 viewphone*/}
+        <div className="grid grid-cols-1 lg:grid-cols-4 lg:hidden">
+          <div className=" col-span-2 px-4 lg:pl-[29%] lg:pr-10 py-10 grid lg:content-center">
+            <p className=" text-xl text-gray-800">
+              Cuidamos cada detalle en su 
+              elaboración. Nos esforzamos 
+              en utilizar únicamente los 
+              ingredientes de la más alta 
+              calidad, para garantizar un 
+              producto fresco y delicioso
+            </p>
+          </div>
+          <div className=" col-span-2">
+            <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover' alt="foto referencial de tequeños"/>
+          </div>
+        </div>      
         {/* descripción 2*/}
-        <div className="grid grid-cols-4">
+        <div className="hidden lg:grid grid-cols-4">
           <div className=" col-span-2">
             <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover' alt="foto referencial de tequeños"/>
           </div>
@@ -93,8 +109,8 @@ export default function Home() {
           </div>
         </div>
         {/* descripción 3*/}
-        <div className="grid grid-cols-4">
-          <div className=" col-span-2 pl-[29%] pr-10 py-10 grid content-center space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4">
+          <div className="col-span-2 px-4 lg:pl-[29%] lg:pr-10 py-10 grid lg:content-center space-y-8">
             <p className=" text-xl text-gray-800">
               ¡Déjate conquistar por 
               el auténtico sabor de 
