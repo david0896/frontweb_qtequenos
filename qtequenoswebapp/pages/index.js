@@ -67,7 +67,7 @@ export default function Home() {
             </p>
           </div>
           <div className=" col-span-2">
-            <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover' alt="foto referencial de tequeños"/>
+            <Image width={1080} height={720} src="https://i.postimg.cc/zG9m58RD/Untitled-3-01.jpg" className='h-[30rem] object-cover' alt="tequeño de queso"/>
           </div>
         </div>   
         {/* descripción 2 viewphone*/}
@@ -83,13 +83,13 @@ export default function Home() {
             </p>
           </div>
           <div className=" col-span-2">
-            <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover' alt="foto referencial de tequeños"/>
+            <Image width={1080} height={720} src="https://i.postimg.cc/VLdHN2wJ/teque-os-de-queso.jpg" className='h-[30rem] object-cover' alt="Tequeños de queso"/>
           </div>
         </div>      
         {/* descripción 2*/}
         <div className="hidden lg:grid grid-cols-4">
           <div className=" col-span-2">
-            <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover' alt="foto referencial de tequeños"/>
+            <Image width={1080} height={720} src="https://i.postimg.cc/VLdHN2wJ/teque-os-de-queso.jpg" className='h-[30rem] object-cover' alt="foto referencial de tequeños"/>
           </div>
           <div className=" col-span-2 pr-[29%] pl-10 py-10 grid content-center">
             <p className=" text-xl text-gray-800">
@@ -126,7 +126,7 @@ export default function Home() {
             </button>
           </div>
           <div className=" col-span-2">
-            <Image width={1080} height={720} src="/img/tequenosEnplato.jpg" className='object-cover' alt="foto referencial de tequeños"/>
+            <Image width={1080} height={720} src="https://i.postimg.cc/zDdc88sm/pastelitos-de-carne.jpg" className='h-[30rem] object-cover' alt="foto referencial de tequeños"/>
           </div>
         </div> 
       </Layout>
