@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import '@/styles/globals.css';
 import Mantenimiento from './mantenimiento';
+import { ParallaxProvider } from 'react-scroll-parallax';
+
 
 export default function App({ Component, pageProps }) {
 
@@ -22,9 +24,9 @@ export default function App({ Component, pageProps }) {
   }, [router.events]); */
 
   return ( 
-    <>
+    <ParallaxProvider>
         {/* verificacion de variable y dirección de la url */}
       {enMantenimiento && router.pathname !== '/mantenimiento' ? <Mantenimiento/> : <Component {...pageProps} />}
-    </>
+    </ParallaxProvider>
   )
 }

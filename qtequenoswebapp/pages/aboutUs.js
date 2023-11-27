@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Layout from "@/components/layout";
+import { ParallaxBanner } from 'react-scroll-parallax';
 
 export default function AboutUs() {
     return (
@@ -8,7 +9,11 @@ export default function AboutUs() {
             description={'Informacipon de la empresa'}
         >
             <div className="">
-                <Image width={1080} height={720} src="https://i.postimg.cc/wMcBtzrL/banner-de-qteque-os-quienes-somos.webp" className='h-[25rem] object-cover w-screen' alt="Tequeños de queso"/>    
+                {/* <Image width={1080} height={720} src="https://i.postimg.cc/wMcBtzrL/banner-de-qteque-os-quienes-somos.webp" className='h-[25rem] object-cover w-screen' alt="Tequeños de queso"/>     */}
+                <ParallaxBanner
+                    layers={[{ image: 'https://i.postimg.cc/52trD7K1/Firefly-20231123145835.png', speed: -15 }]}
+                    className="aspect-[2/1] w-screen h-[25rem]"
+                />
             </div>
             <div className="px-5 mt-10 mb-[6rem] mx-auto lg:w-9/12">
                 <div className="grid grid-cols-1 lg:grid-cols-4">

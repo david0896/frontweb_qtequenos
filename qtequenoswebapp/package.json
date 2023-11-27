@@ -12,7 +12,8 @@
     "@splidejs/react-splide": "^0.7.12",
     "next": "13.5.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-scroll-parallax": "^3.4.4"
   },
   "devDependencies": {
     "autoprefixer": "^10",
