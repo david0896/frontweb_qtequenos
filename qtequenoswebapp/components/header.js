@@ -10,7 +10,7 @@ export default function Header() {
      
     return (
         <header className="z-[99] lg:relative">           
-            <nav className=" bg-white border-gray-200 dark:bg-slate-800">
+            <nav className=" bg-white border-gray-200">
                 <div className="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto p-4">
                     <div className="flex flex-wrap items-center justify-between lg:justify-end w-full lg:w-auto mb-2 lg:mb-0">
                         <Link href="/" className="items-center hidden">
@@ -30,32 +30,32 @@ export default function Header() {
                     <div id="mega-menu-icons" className={"items-center justify-between w-full md:flex md:w-auto md:order-1" + (navbarOpen ? " flex" : " hidden")}>
                         <ul className="flex flex-col mt-4 font-medium md:flex-row md:space-x-8 md:mt-0">
                             <li>
-                                <Link href="/" className={`block py-2 pl-3 pr-4 ${pathname === '/' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 dark:text-blue-500 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700`} aria-current="page">INICIO</Link>
+                                <Link href="/" className={`block py-2 pl-3 pr-4 ${pathname === '/' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `} aria-current="page">INICIO</Link>
                             </li>
                             <li>
-                                <Link href="/aboutUs/" className={`block py-2 pl-3 pr-4 ${pathname === '/aboutUs' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 dark:text-blue-500 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700`} aria-current="page">QUIÉNES SOMOS</Link>
+                                <Link href="/aboutUs/" className={`block py-2 pl-3 pr-4 ${pathname === '/aboutUs' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `} aria-current="page">QUIÉNES SOMOS</Link>
                             </li>
                             <li>
-                                <Link href="" className={`block py-2 pl-3 pr-4 ${pathname === '/store/' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700`}>PRODUCTOS</Link>
+                                <Link href="" className={`block py-2 pl-3 pr-4 ${pathname === '/store/' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>PRODUCTOS</Link>
                             </li>                            
                             <li>
-                                <Link href="/service/" className={`block py-2 pl-3 pr-4 ${pathname === '/service' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700`}>SERVICIOS</Link>
+                                <Link href="/service/" className={`block py-2 pl-3 pr-4 ${pathname === '/service' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>SERVICIOS</Link>
                             </li>
                             <li>
-                                <Link href="#" className={`block py-2 pl-3 pr-4 ${pathname === '/store/shoppingCart' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700`}>CARRITO</Link>
+                                <Link href="#" className={`block py-2 pl-3 pr-4 ${pathname === '/store/shoppingCart' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>CARRITO</Link>
                             </li>
                             <li>
-                                <Link href="#" className={`block py-2 pl-3 pr-4 ${pathname === '/caontactUs' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700`}>CONTACTO</Link>
+                                <Link href="#" className={`block py-2 pl-3 pr-4 ${pathname === '/caontactUs' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>CONTACTO</Link>
                             </li>
                             <li className="hidden">
-                                <button id="mega-menu-icons-dropdown-button" data-dropdown-toggle="mega-menu-icons-dropdown" className="flex items-center justify-between w-full py-2 pl-3 pr-4 font-medium text-gray-900 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700">
+                                <button id="mega-menu-icons-dropdown-button" data-dropdown-toggle="mega-menu-icons-dropdown" className="flex items-center justify-between w-full py-2 pl-3 pr-4 font-medium text-gray-900 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 ">
                                     Empresa 
                                     <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
-                                <div id="mega-menu-icons-dropdown" className="absolute z-10 grid hidden w-auto grid-cols-2 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 md:grid-cols-3 dark:bg-gray-700">
-                                    <div className="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
+                                <div id="mega-menu-icons-dropdown" className="absolute z-10 grid hidden w-auto grid-cols-2 text-sm bg-white border border-gray-100 rounded-lg shadow-md md:grid-cols-3 ">
+                                    <div className="p-4 pb-0 text-gray-900 md:pb-4">
                                         <ul className="space-y-4" aria-labelledby="mega-menu-icons-dropdown-button">
                                             <li>
                                                 <a href="#" className="flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 group">
