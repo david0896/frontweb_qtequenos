@@ -36,7 +36,7 @@ export default function Header() {
                                 <Link href="/aboutUs/" className={`block py-2 pl-3 pr-4 ${pathname === '/aboutUs' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `} aria-current="page">QUIÉNES SOMOS</Link>
                             </li>
                             <li>
-                                <Link href="" className={`block py-2 pl-3 pr-4 ${pathname === '/store/' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>PRODUCTOS</Link>
+                                <Link href="/store" className={`block py-2 pl-3 pr-4 ${pathname === '/store/' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>PRODUCTOS</Link>
                             </li>                            
                             <li>
                                 <Link href="/service/" className={`block py-2 pl-3 pr-4 ${pathname === '/service' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>SERVICIOS</Link>
