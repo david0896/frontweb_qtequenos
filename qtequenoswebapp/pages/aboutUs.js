@@ -15,15 +15,15 @@ export default function AboutUs() {
                     className="aspect-[2/1] w-screen h-[25rem]"
                 />
             </div>
-            <div className="px-5 mt-10 mb-[6rem] mx-auto lg:w-9/12">
+            <div className="px-4 mt-10 mb-[6rem] mx-auto lg:w-9/12">
                 <div className="grid grid-cols-1 lg:grid-cols-4">
                     <div className=" col-span-2">
-                        <h1 className="px-10 lg:px-0 text-5xl my-10 uppercase text-[#c21a7f] font-bold">¿Quiénes 
+                        <h1 className="px-4 lg:px-0 text-5xl my-10 uppercase text-[#c21a7f] font-bold">¿Quiénes 
                             <span className="text-[#f5884d] block text-7xl">somos?</span>
                         </h1>
                         <Image width={1080} height={720} src="https://i.postimg.cc/mr9t9km1/bandeja-grande-de-teque-os.png" className='object-cover w-screen -rotate-6 -ml-[2.5rem]' alt="Bandeja grande de tequeños de queso"/>    
                     </div>
-                    <div className=" col-span-2 my-10 space-y-5 px-10 lg:px-0">
+                    <div className=" col-span-2 my-10 space-y-5 px-4 lg:px-0">
                         <p className=" text-xl text-gray-800">
                             Desde el año 2010 nos dedicamos a 
                             la elaboración del auténtico y tradicional 

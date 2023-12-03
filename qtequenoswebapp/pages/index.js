@@ -72,7 +72,7 @@ export default function Home() {
         </div>   
         {/* descripción 2 viewphone*/}
         <div className="grid grid-cols-1 lg:grid-cols-4 lg:hidden">
-          <div className=" col-span-2 px-4 lg:pl-[29%] lg:pr-10 py-10 grid lg:content-center">
+          <div className=" col-span-2 px-4 py-10 lg:pl-[29%] lg:pr-10 grid lg:content-center">
             <p className=" text-xl text-gray-800">
               Cuidamos cada detalle en su 
               elaboración. Nos esforzamos 

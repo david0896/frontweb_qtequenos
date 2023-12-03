@@ -32,7 +32,7 @@ export default function Service() {
                                 venezolanos, nos empeñamos en la 
                                 búsqueda de ingredientes óptimos
                             </p>
-                            <h2 className="text-7xl uppercase my-10 text-[#c21a7f] font-bold">Eventos</h2>
+                            <h2 className="text-6xl lg:text-7xl uppercase my-10 text-[#c21a7f] font-bold">Eventos</h2>
                             <p className=" text-xl text-gray-800">
                                 Desde el año 2010 nos dedicamos a 
                                 la elaboración del auténtico y tradicional 
