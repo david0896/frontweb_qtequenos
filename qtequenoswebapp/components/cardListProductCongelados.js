@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-export default function ProductCard({products}) {
+export default function CardListProductCongelados({products}) { 
     
     return(
         <>
@@ -8,7 +8,7 @@ export default function ProductCard({products}) {
             products &&
             products.data.map((product)=>{
                 return( 
-                    <li key={product.id} className=' p-5 rounded-3xl bg-[#eae7e8] space-y-3 w-[14.5rem]'>
+                    <div key={product.id} className=' p-5 rounded-3xl bg-[#eae7e8] space-y-3 my-8'>
                         <h2 className='text-[#d388b5] text-xl font-extrabold uppercase text-center'>{product.attributes.name}</h2>
                         <div className='flex items-center justify-between'>
                             <span className=' text-lg font-bold'>${product.attributes.description}</span>
@@ -19,10 +19,10 @@ export default function ProductCard({products}) {
                                 COMPRAR
                             </button>
                         </div>
-                    </li>
+                    </div>
                 );
             })
-        }
+        }     
         </>
     )
 }
