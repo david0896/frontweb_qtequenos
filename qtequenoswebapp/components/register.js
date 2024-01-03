@@ -107,10 +107,10 @@ const Register = ({setAlert}) => {
                         width={1080} 
                         height={920} 
                         alt="Logo" 
-                        className="object-contain w-[13rem] h-[13rem] flex flex-col items-center justify-center"
+                        className="object-contain w-[8rem] lg:w-[13rem] h-[13rem] flex flex-col items-center justify-center"
                     />  
                     <h1 className='text-base text-center font-medium text-[#d3850f] flex flex-col items-center justify-center'>
-                        <span className='text-2xl font-bold block'>¡Registrate ahora!</span> 
+                        <span className='text-lg lg:text-2xl font-bold block'>¡Registrate ahora!</span> 
                         para disfruta de los sabores más exquisitos
                     </h1>
                 </div>
@@ -128,14 +128,14 @@ const Register = ({setAlert}) => {
                             <svg id="Layer_1" className='w-7 hover:cursor-pointer' enableBackground="new 0 0 100 100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g><path d="m44.93 76.47c.49.49 1.13.73 1.77.73s1.28-.24 1.77-.73c.98-.98.98-2.56 0-3.54l-21.43-21.43h51.96c1.38 0 2.5-1.12 2.5-2.5s-1.12-2.5-2.5-2.5h-51.96l21.43-21.43c.98-.98.98-2.56 0-3.54s-2.56-.98-3.54 0l-25.7 25.7c-.98.98-.98 2.56 0 3.54z"></path></g></svg>
                         </Link>
                     </div>
-                    <h2 className='text-lg font-bold text-[#d3850f] '>Iniciar sesión</h2>                
-                    <form onSubmit={handleSubmit} className="mt-5">
+                    <h2 className='text-lg font-bold text-[#d3850f] '>Crear usuario</h2>                
+                    <form onSubmit={handleSubmit} className="mt-5 max-h-[15rem] lg:max-h-full overflow-y-auto">
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="username"
                                     onChange={handleChange} 
                                     id="username" 
-                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
+                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                                     required 
                             />
@@ -146,7 +146,7 @@ const Register = ({setAlert}) => {
                                     name="name"
                                     onKeyDown={handleKeyDown}
                                     id="name" 
-                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
+                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                                     required 
                             />
@@ -157,7 +157,7 @@ const Register = ({setAlert}) => {
                                     name="lastname"
                                     onKeyDown={handleKeyDown}
                                     id="lastname" 
-                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
+                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                                     required 
                             />
@@ -168,7 +168,7 @@ const Register = ({setAlert}) => {
                                     name="document"
                                     onKeyDown={handleKeyDown}
                                     id="document" 
-                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
+                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                                     required 
                             />
@@ -179,7 +179,7 @@ const Register = ({setAlert}) => {
                                     name="email"
                                     onKeyDown={handleKeyDown} 
                                     id="email" 
-                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
+                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                                     required 
                             />
@@ -190,7 +190,7 @@ const Register = ({setAlert}) => {
                                     name="phone"
                                     onKeyDown={handleKeyDown}
                                     id="phone" 
-                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
+                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                                     required 
                             />
@@ -201,13 +201,13 @@ const Register = ({setAlert}) => {
                                     name="password"
                                     onKeyDown={handleKeyDown} 
                                     id="password" 
-                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
+                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                                     required 
                             />
                             <label htmlFor="password" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Contraseña</label>
                         </div>
-                        <button type="submit" className="text-white bg-[#d3850f] hover:bg-[#943800] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Enviar</button>
+                        <button type="submit" className="text-white bg-[#d3850f] hover:bg-[#943800] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Enviar</button>
                     </form>
                     <p className='mt-2 text-sm'>Si tienes una cuenta <Link href={'/loginRegister?form=login'} className='font-semibold text-[#c21a7f]'>Inicia sesión aquí</Link></p>
                    

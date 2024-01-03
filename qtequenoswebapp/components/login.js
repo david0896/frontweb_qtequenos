@@ -39,7 +39,7 @@ const Login = ({setAlert}) => {
     };
 
     return (
-        <div className='bg-white w-[90%] lg:w-[60%] h-[70%] rounded-3xl shadow-xl grid grid-cols-1 lg:grid-cols-5 z-10'>
+        <div className='bg-white w-[90%] lg:w-[60%] h-[90%] lg:h-[70%] rounded-3xl shadow-xl grid grid-cols-1 lg:grid-cols-5 z-10'>
             <div className='relative col-span-3 overflow-hidden'>
                 <div className=' block lg:hidden absolute top-0 left-0 m-5 z-10'>
                     <Link 
@@ -63,10 +63,10 @@ const Login = ({setAlert}) => {
                         width={1080} 
                         height={920} 
                         alt="Logo" 
-                        className="object-contain w-[13rem] h-[13rem] flex flex-col items-center justify-center"
+                        className="object-contain w-[8rem] lg:w-[13rem] h-[13rem] flex flex-col items-center justify-center"
                     />  
                     <h1 className='text-base text-center font-medium text-[#d3850f] flex flex-col items-center justify-center'>
-                        <span className='text-2xl font-bold block'>¡Bienvenido de vuelta!</span> 
+                        <span className='text-lg lg:text-2xl font-bold block'>¡Bienvenido de vuelta!</span> 
                         ¿Te apetece algo dulce o salado hoy?
                     </h1>
                 </div>
@@ -91,7 +91,7 @@ const Login = ({setAlert}) => {
                                     name="identifier"
                                     onChange={handleChange} 
                                     id="identifier" 
-                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
+                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                                     required 
                             />
@@ -102,7 +102,7 @@ const Login = ({setAlert}) => {
                                     name="password"
                                     onChange={handleChange} 
                                     id="password" 
-                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
+                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                                     required 
                             />
