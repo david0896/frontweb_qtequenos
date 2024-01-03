@@ -6,7 +6,7 @@ import { fetcher } from '../../lib/api';
 import {getTokenFromLocalCookie} from '../../lib/auth';
 import Cookies from 'js-cookie';
 
-export default function checkout({payMethods, alert, setAlert}) {
+export default function Checkout({payMethods, alert, setAlert}) {
     const [data, setData] = useState({
         deliveryAddress: 'Retiro en tienda',
         recipientsName: '',
