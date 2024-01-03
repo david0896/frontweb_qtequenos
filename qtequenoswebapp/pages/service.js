@@ -1,10 +1,14 @@
 import Image from "next/image";
 import Layout from "@/components/layout";
 import { ParallaxBanner } from 'react-scroll-parallax';
+import { useFetchUser } from '../lib/authContext';
 
 export default function Service() {
+    const { user, loading } = useFetchUser();
+
     return (
         <Layout
+            user={user}  
             title={'Quienes somos'}
             description={'Servicios que presta la empresa'}
         >

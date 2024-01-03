@@ -2,14 +2,24 @@ import { useRouter } from 'next/router';
 import { useState } from "react";
 import Image from "next/image"
 import Link from "next/link"
+import { unsetToken } from '../lib/auth';
+import { useUser } from '../lib/authContext';
+import style from "../styles/styles.module.css";
+
+import NavAuthStrapi from './navAuthStrapi';
+
+const logout = () => {
+    unsetToken();
+  };
 
 export default function Header() {
     const router = useRouter();
     const { pathname } = router;
     const [navbarOpen, setNavbarOpen] = useState(false);
+    const { user, loading } = useUser();
      
     return (
-        <header className="z-[99] lg:relative">           
+        <header className={`${style.headerNav} z-[99] lg:relative`}>           
             <nav className=" bg-white border-gray-200">
                 <div className="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto p-4">
                     <div className="flex flex-wrap items-center justify-between lg:justify-end w-full lg:w-auto mb-2 lg:mb-0">
@@ -36,18 +46,48 @@ export default function Header() {
                                 <Link href="/aboutUs/" className={`block py-2 pl-3 pr-4 ${pathname === '/aboutUs' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `} aria-current="page">QUIÉNES SOMOS</Link>
                             </li>
                             <li>
-                                <Link href="/store" className={`block py-2 pl-3 pr-4 ${pathname === '/store/' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>PRODUCTOS</Link>
+                                <Link href="/store" className={`block py-2 pl-3 pr-4 ${pathname === '/store' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>PRODUCTOS</Link>
                             </li>                            
                             <li>
                                 <Link href="/service/" className={`block py-2 pl-3 pr-4 ${pathname === '/service' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>SERVICIOS</Link>
                             </li>
                             <li>
-                                <Link href="#" className={`block py-2 pl-3 pr-4 ${pathname === '/store/shoppingCart' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>CARRITO</Link>
+                                <Link href="/contactUs" className={`block py-2 pl-3 pr-4 ${pathname === '/contactUs' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>CONTACTO</Link>
                             </li>
+                            {!loading &&
+                            (user ? (
                             <li>
-                                <Link href="#" className={`block py-2 pl-3 pr-4 ${pathname === '/caontactUs' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0 `}>CONTACTO</Link>
+                                <Link className={`block py-2 pl-3 pr-4 ${pathname === '/profile' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0`} href="/profile">
+                                    PERFIL
+                                </Link>
                             </li>
-                            <li className="hidden">
+                            ) : (
+                            ''
+                            ))}
+                            {!loading &&
+                            (user ? (
+                            <li>
+                                <Link
+                                href="#"
+                                className={`block py-2 pl-3 pr-4 text-gray-900 font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0`}
+                                onClick={logout}
+                                style={{ cursor: 'pointer' }}
+                                >
+                                CERRAR SESIÓN
+                                </Link>
+                            </li>
+                            ) : (
+                            ''
+                            ))}
+
+                            <li>
+                                <Link href="/store/shoppingCart">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className={`${pathname === '/store/shoppingCart' ? 'fill-[#c21a7f]' : 'fill-gray-900'} hover:fill-[#c21a7f] ml-3 lg:ml-0 my-2 lg:my-0`} width="24" height="24" viewBox="0 0 24 24">
+                                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                                    </svg>
+                                </Link>
+                            </li>                           
+                            {/* <li className="hidden">
                                 <button id="mega-menu-icons-dropdown-button" data-dropdown-toggle="mega-menu-icons-dropdown" className="flex items-center justify-between w-full py-2 pl-3 pr-4 font-medium text-gray-900 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 ">
                                     Empresa 
                                     <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -162,11 +202,11 @@ export default function Header() {
                                         </ul>
                                     </div>
                                 </div>
-                            </li>                            
+                            </li>  */}                           
                         </ul>
                     </div>
                 </div>
-            </nav>   
+            </nav>  
         </header>
     )  
 }

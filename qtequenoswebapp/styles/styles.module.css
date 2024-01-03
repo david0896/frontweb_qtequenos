@@ -60,3 +60,8 @@
 .customShapeDivider .shapeFill {
     fill: #FFFFFF;
 }
+
+.headerNav {
+    position: sticky;
+    top: 0;
+  }

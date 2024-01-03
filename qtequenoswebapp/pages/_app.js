@@ -1,32 +1,78 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 import '@/styles/globals.css';
-import Mantenimiento from './mantenimiento';
 import { ParallaxProvider } from 'react-scroll-parallax';
 
-
 export default function App({ Component, pageProps }) {
+  const shoppingCartLs = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('shoppingCart')) ?? []: [];
+  const [shoppingCart, setShoppingCart] = useState(shoppingCartLs);
+  const [readyPage, setReadyPage] = useState(false);
+  const [alert, setAlert] = useState('');
+  const [total, setTotal] = useState(0);
 
-  const router = useRouter(); //acceso a los recursos de la url
-  const enMantenimiento = false;
-  //acceso a toda metadata de la url
-/*   useEffect(() => {    
-    const handleRouteChange = (url) => {
-      window.gtag("config", 'G-DTB6V5Z42N', {
-          page_path: url,
-      });
-    };
-    router.events.on("routeChangeComplete", handleRouteChange);
+  const [quantity, setQuantity] = useState([]);
 
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [router.events]); */
+  useEffect(() => {
+    localStorage.setItem('shoppingCart', JSON.stringify( shoppingCart ));
+  }, [shoppingCart])
+  
+  useEffect(() => {
+    setReadyPage(true);
+  }, [])
+  
+
+  const addShoppingCart = (product) => {
+    // Comprobar si la product ya esta en el carrito...
+    if(shoppingCart.some( productState =>  productState.id === product.id )) {
+        // Iterar para actualizar quantity
+        const updatedShoppingCart = shoppingCart.map( productState => {
+            if( productState.id === product.id ) {
+                productState.quantity = product.quantity;
+            } 
+            return productState;
+        });
+        // Se asigna al array
+        setShoppingCart([...updatedShoppingCart]);
+        localStorage.setItem('shoppingCart', JSON.stringify( shoppingCart ));
+    } else {
+        // En caso de que el articulo no exista, es nuevo y se agrega
+        setShoppingCart([...shoppingCart, product]);
+        localStorage.setItem('shoppingCart', JSON.stringify( shoppingCart ));
+    }
+  }
+
+  const deleteProduct = id => {
+      const updatedShoppingCart = shoppingCart.filter( producto => producto.id != id)
+      setShoppingCart(updatedShoppingCart)
+      window.localStorage.setItem('shoppingCart', JSON.stringify( shoppingCart ));
+  }
+
+  const updateQuantity = product => {
+    const updatedShoppingCart = shoppingCart.map( productState => {
+      if(productState.id === product.id ) {
+        productState.quantity = parseInt( product.quantity )
+      } 
+      return productState
+    })
+    setShoppingCart(updatedShoppingCart)
+    window.localStorage.setItem('shoppingCart', JSON.stringify( shoppingCart ));
+  }
 
   return ( 
-    <ParallaxProvider>
-        {/* verificacion de variable y dirección de la url */}
-      {enMantenimiento && router.pathname !== '/mantenimiento' ? <Mantenimiento/> : <Component {...pageProps} />}
-    </ParallaxProvider>
+    readyPage ?
+      <ParallaxProvider>
+        <Component 
+          {...pageProps}
+          shoppingCart={shoppingCart}
+          setShoppingCart={setShoppingCart}
+          addShoppingCart={addShoppingCart}
+          deleteProduct={deleteProduct}
+          updateQuantity={updateQuantity}
+          alert={alert}
+          setAlert={setAlert}
+          total={total}
+          setTotal={setTotal}
+        />    
+      </ParallaxProvider>
+    : null
   )
 }
