@@ -6,13 +6,13 @@ import { useFetchUser } from '../lib/authContext';
 import { setToken } from '../lib/auth';
 import { fetcher } from '../lib/api';
 
-const emailRegex     = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+const emailRegex     = new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,6}(\.[a-z]{2,6}){0,3}$');
 const phoneRegex     = /^[0-9]+$/;
 const textRegex      = new RegExp('^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$');
-const identidadRegex = new RegExp('^[VvEeJjGg][0-9]{7,8}$');
+const identidadRegex = /^[vegjVEGJ]\d{8}$/;
 
 const Register = ({setAlert}) => {
-    
+    const [cedula, setCedula] = useState('');
     const {user, loading} = useFetchUser();
     const router = useRouter();
     const [userData, setUserData] = useState({
@@ -63,6 +63,20 @@ const Register = ({setAlert}) => {
         setUserData({ ...userData, [name]: value });
     };
 
+    const handleChangeDocument = (event) => {
+        const valor = event.target.value;
+        const ultimoCaracter = valor.charAt(valor.length - 1);
+    
+        // Regex para validar cada carácter
+        const regex = /^[vegjVEGJ0-9]$/;
+    
+        if (regex.test(ultimoCaracter) || valor === '') {
+            setCedula(valor);
+          } else {
+            setAlert('Carácter no válido');
+          }
+      };
+
     const handleKeyDown = (event) =>{
         const { name, value } = event.target;
         
@@ -71,6 +85,15 @@ const Register = ({setAlert}) => {
             setAlert('Campo de solo texto')
             return
         }
+
+        if(identidadRegex.test(event.key))
+            console.log(event.key)
+
+       /*  if (!identidadRegex.test(event.key) && name === 'document') {
+            event.preventDefault();
+            setAlert('Agrega una letra (v, e, j, g) al inicio antes de los numeros')
+            return
+        } */
         
         if (!phoneRegex.test(event.key) && name === 'phone' && event.key.length === 1) {
             event.preventDefault();
@@ -129,7 +152,7 @@ const Register = ({setAlert}) => {
                         </Link>
                     </div>
                     <h2 className='text-lg font-bold text-[#d3850f] '>Crear usuario</h2>                
-                    <form onSubmit={handleSubmit} className="mt-5 pb-4 lg:pb-0 pt-8 lg:pt-0 max-h-[15rem] lg:max-h-full overflow-y-auto">
+                    <form onSubmit={handleSubmit} className="mt-5 pb-4 lg:pb-0 pt-8 lg:pt-2 max-h-[15rem] lg:max-h-full overflow-y-auto">
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="username"
@@ -166,7 +189,8 @@ const Register = ({setAlert}) => {
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="document"
-                                    onKeyDown={handleKeyDown}
+                                    onChange={handleChangeDocument}
+                                    value={cedula}
                                     id="document" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
