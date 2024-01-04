@@ -6,13 +6,13 @@ import { useFetchUser } from '../lib/authContext';
 import { setToken } from '../lib/auth';
 import { fetcher } from '../lib/api';
 
-const emailRegex     = new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,6}(\.[a-z]{2,6}){0,3}$');
+const emailRegex     = '([\\w-+]+(?:\\.[\\w-+]+)*@(?:[\\w-]+\\.)+[a-zA-Z]{2,7})';
+const regex          = /^[vegjVEGJ0-9]$/;
 const phoneRegex     = /^[0-9]+$/;
 const textRegex      = new RegExp('^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$');
 const identidadRegex = /^[vegjVEGJ]\d{8}$/;
 
 const Register = ({setAlert}) => {
-    const [cedula, setCedula] = useState('');
     const {user, loading} = useFetchUser();
     const router = useRouter();
     const [userData, setUserData] = useState({
@@ -29,11 +29,27 @@ const Register = ({setAlert}) => {
         e.preventDefault();
         console.log(userData)
         try {
-            if (!emailRegex.test(userData.email)) {
-                setAlert('Coloca un correo valido')
-                return
-            } 
 
+            if (!userData.username || !userData.name || !userData.lastname || !userData.document || !userData.email || !userData.phone || !userData.password) {
+                setAlert('Todos los campos son obligatorios');                
+                return;
+            }
+
+            if (!userData.name.match(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$/) || !userData.lastname.match(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$/)) {
+                setAlert('Los campos de nombre o apellido son de solo texto');                
+                return;
+            }
+
+            if (!userData.email.match(emailRegex)) {
+                setAlert('Debe ingresar un correo valido');                
+                return;
+            }
+
+            if (!userData.phone.match(/^[0-9]+$/)) {
+                setAlert('El campo telefono es de solo numeros');                
+                return;
+            }
+          
             const responseData = await fetcher(
             `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`,
             {
@@ -52,6 +68,11 @@ const Register = ({setAlert}) => {
               method: 'POST',
             }
             );
+
+            console.log('-------------responseData--------------')
+            console.log(responseData)
+            console.log('-------------responseData--------------')
+
             setToken(responseData, setAlert);
         } catch (error) {
           console.error(error);
@@ -62,48 +83,6 @@ const Register = ({setAlert}) => {
         const { name, value } = e.target;
         setUserData({ ...userData, [name]: value });
     };
-
-    const handleChangeDocument = (event) => {
-        const valor = event.target.value;
-        const ultimoCaracter = valor.charAt(valor.length - 1);
-    
-        // Regex para validar cada carácter
-        const regex = /^[vegjVEGJ0-9]$/;
-    
-        if (regex.test(ultimoCaracter) || valor === '') {
-            setCedula(valor);
-          } else {
-            setAlert('Carácter no válido');
-          }
-      };
-
-    const handleKeyDown = (event) =>{
-        const { name, value } = event.target;
-        
-        if (!textRegex.test(event.key) && name === 'name' || !textRegex.test(event.key) && name === 'lastname') {
-            event.preventDefault();
-            setAlert('Campo de solo texto')
-            return
-        }
-
-        if(identidadRegex.test(event.key))
-            console.log(event.key)
-
-       /*  if (!identidadRegex.test(event.key) && name === 'document') {
-            event.preventDefault();
-            setAlert('Agrega una letra (v, e, j, g) al inicio antes de los numeros')
-            return
-        } */
-        
-        if (!phoneRegex.test(event.key) && name === 'phone' && event.key.length === 1) {
-            event.preventDefault();
-            setAlert('Campo de solo numeros')
-            return
-        }
-
-        setUserData({ ...userData, [name]: value });
-      }
-    
 
     return (
     <div className='bg-white w-[90%] lg:w-[60%] h-[100%] rounded-3xl shadow-xl grid grid-cols-1 lg:grid-cols-5 z-10'>
@@ -156,7 +135,8 @@ const Register = ({setAlert}) => {
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="username"
-                                    onChange={handleChange} 
+                                    value={userData.username}
+                                    onChange={handleChange}
                                     id="username" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
@@ -167,7 +147,8 @@ const Register = ({setAlert}) => {
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="name"
-                                    onKeyDown={handleKeyDown}
+                                    value={userData.name}
+                                    onChange={handleChange}
                                     id="name" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
@@ -178,7 +159,8 @@ const Register = ({setAlert}) => {
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="lastname"
-                                    onKeyDown={handleKeyDown}
+                                    value={userData.lastname}
+                                    onChange={handleChange}
                                     id="lastname" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
@@ -189,8 +171,8 @@ const Register = ({setAlert}) => {
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="document"
-                                    onChange={handleChangeDocument}
-                                    value={cedula}
+                                    value={userData.document}
+                                    onChange={handleChange}
                                     id="document" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
@@ -201,7 +183,8 @@ const Register = ({setAlert}) => {
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="email"
-                                    onKeyDown={handleKeyDown} 
+                                    value={userData.email}
+                                    onChange={handleChange}
                                     id="email" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
@@ -212,22 +195,27 @@ const Register = ({setAlert}) => {
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="phone"
-                                    onKeyDown={handleKeyDown}
+                                    value={userData.phone}
+                                    onChange={handleChange}
                                     id="phone" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                                     required 
+                                    minlength="11"
+                                    maxlength="11"
                             />
                             <label htmlFor="phone" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Telefono</label>
                         </div>                        
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="password"
                                     name="password"
-                                    onKeyDown={handleKeyDown} 
+                                    value={userData.password}
+                                    onChange={handleChange} 
                                     id="password" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                                     required 
+                                    minlength="6"
                             />
                             <label htmlFor="password" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Contraseña</label>
                         </div>
