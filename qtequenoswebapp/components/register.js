@@ -5,17 +5,20 @@ import { useRouter } from 'next/router';
 import { useFetchUser } from '../lib/authContext';
 import { setToken } from '../lib/auth';
 import { fetcher } from '../lib/api';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
-const emailRegex     = '([\\w-+]+(?:\\.[\\w-+]+)*@(?:[\\w-]+\\.)+[a-zA-Z]{2,7})';
+/* const emailRegex     = '([\\w-+]+(?:\\.[\\w-+]+)*@(?:[\\w-]+\\.)+[a-zA-Z]{2,7})';
 const regex          = /^[vegjVEGJ0-9]$/;
 const phoneRegex     = /^[0-9]+$/;
 const textRegex      = new RegExp('^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$');
-const identidadRegex = /^[vegjVEGJ]\d{8}$/;
+const identidadRegex = /^[vegjVEGJ]\d{8}$/; */
 
 const Register = ({setAlert}) => {
     const {user, loading} = useFetchUser();
     const router = useRouter();
-    const [userData, setUserData] = useState({
+    /* const [userData, setUserData] = useState({
       username: '',
       name: '',
       lastname: '',
@@ -23,69 +26,53 @@ const Register = ({setAlert}) => {
       email: '',
       phone: '',
       password: '',
-    });
+    }); */
+    const schema = yup.object().shape({
+        username: yup.string().trim().required('El campo es requerido'),
+        name: yup.string().required('El campo es requerido').matches(/^[A-Za-z]+$/, "Solo se permiten letras"),
+        lastname: yup.string().required('El campo es requerido').matches(/^[A-Za-z]+$/, "Solo se permiten letras"),
+        document: yup.string().trim().required('El campo es requerido').matches(/^[jJvVeEgG]\d{8}$/, "Debe comenzar con jJ, vV, eE, gG seguido de 8 números"),
+        email: yup.string().trim().required('El campo es requerido').email('Ingrese un correo valido como: ejemplo@next.com'),
+        phone: yup.string().trim().required('El campo es requerido').matches(/^\d+$/, "Solo se permiten números").min(11, 'Debe ingresar minimo 11 caracteres'),
+        password: yup.string().trim().required('El campo es requerido').min(8, 'La contraseña de ser de minimo 8 caracteres')
+      });
+    
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(schema)
+        
+      });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log(userData)
+      console.log(errors.username?.message)
+
+    const onSubmit = async userData => {
         try {
-
-            if (!userData.username || !userData.name || !userData.lastname || !userData.document || !userData.email || !userData.phone || !userData.password) {
-                setAlert('Todos los campos son obligatorios');                
-                return;
+            if(userData){
+                const responseData = await fetcher(
+                `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: userData.username,
+                        name: userData.name,
+                        lastname: userData.lastname,
+                        document: userData.document,
+                        email: userData.email,
+                        phone: userData.phone,
+                        password: userData.password,
+                    }),
+                    method: 'POST',
+                    }
+                );
+                setToken(responseData, setAlert);
             }
-
-            if (!userData.name.match(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$/) || !userData.lastname.match(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$/)) {
-                setAlert('Los campos de nombre o apellido son de solo texto');                
-                return;
-            }
-
-            if (!userData.email.match(emailRegex)) {
-                setAlert('Debe ingresar un correo valido');                
-                return;
-            }
-
-            if (!userData.phone.match(/^[0-9]+$/)) {
-                setAlert('El campo telefono es de solo numeros');                
-                return;
-            }
-          
-            const responseData = await fetcher(
-            `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                username: userData.username,
-                name: userData.name,
-                lastname: userData.lastname,
-                document: userData.document,
-                email: userData.email,
-                phone: userData.phone,
-                password: userData.password,
-              }),
-              method: 'POST',
-            }
-            );
-
-            console.log('-------------responseData--------------')
-            console.log(responseData)
-            console.log('-------------responseData--------------')
-
-            setToken(responseData, setAlert);
         } catch (error) {
           console.error(error);
         }
     };
-    
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setUserData({ ...userData, [name]: value });
-    };
 
     return (
-    <div className='bg-white w-[90%] lg:w-[60%] h-[100%] rounded-3xl shadow-xl grid grid-cols-1 lg:grid-cols-5 z-10'>
+    <div className='bg-white w-[90%] lg:w-[60%] h-[80%] lg:h-[100%] rounded-3xl shadow-xl grid grid-cols-1 lg:grid-cols-5 z-10'>
             <div className='relative col-span-3 overflow-hidden'>
                 <div className=' block lg:hidden absolute top-0 left-0 m-5 z-10'>
                     <Link 
@@ -102,9 +89,9 @@ const Register = ({setAlert}) => {
                     width={1080} 
                     height={720} 
                     alt="Background image" 
-                    className=" rounded-t-3xl lg:rounded-s-3xl h-full object-cover"
+                    className=" rounded-t-3xl lg:rounded-s-3xl h-full object-cover hidden lg:block"
                 />    
-                <div className='absolute inset-0 flex items-center justify-center flex-col pb-[5rem]'>
+                <div className='absolute inset-0 hidden lg:flex items-center justify-center flex-col pb-[5rem]'>
                     <Image src={'https://i.postimg.cc/1zYVNXvR/logo-qtq.webp'} 
                         width={1080} 
                         height={920} 
@@ -131,93 +118,87 @@ const Register = ({setAlert}) => {
                         </Link>
                     </div>
                     <h2 className='text-lg font-bold text-[#d3850f] '>Crear usuario</h2>                
-                    <form onSubmit={handleSubmit} className="mt-5 pb-4 lg:pb-0 pt-8 lg:pt-2 max-h-[15rem] lg:max-h-full overflow-y-auto">
+                    <form onSubmit={handleSubmit(onSubmit)} className="mt-5 pb-4 lg:pb-0 pt-4 lg:pt-2 max-h-full overflow-y-auto">
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="username"
-                                    value={userData.username}
-                                    onChange={handleChange}
+                                    {...register("username")}
                                     id="username" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
-                                    placeholder="" 
-                                    required 
+                                    placeholder=""  
                             />
                             <label htmlFor="username" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Usuario</label>
+                            {errors.username?.message && <span>{errors.username?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="name"
-                                    value={userData.name}
-                                    onChange={handleChange}
+                                    {...register("name")}
                                     id="name" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
-                                    required 
                             />
                             <label htmlFor="name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nombre</label>
+                            {errors.name?.message && <span>{errors.name?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="lastname"
-                                    value={userData.lastname}
-                                    onChange={handleChange}
+                                    {...register("lastname")}
                                     id="lastname" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
-                                    placeholder="" 
-                                    required 
+                                    placeholder=""                                  
                             />
                             <label htmlFor="lastname" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Apellido</label>
+                            {errors.lastname?.message && <span>{errors.lastname?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="document"
-                                    value={userData.document}
-                                    onChange={handleChange}
+                                    {...register("document")}
                                     id="document" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
-                                    required 
                             />
                             <label htmlFor="document" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cedula/rif</label>
+                            {errors.document?.message && <span>{errors.document?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="email"
-                                    value={userData.email}
-                                    onChange={handleChange}
+                                    {...register("email")}
                                     id="email" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
-                                    required 
+                                     
                             />
                             <label htmlFor="email" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Correo</label>
+                            {errors.email?.message && <span>{errors.email?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="phone"
-                                    value={userData.phone}
-                                    onChange={handleChange}
+                                    {...register("phone")}
                                     id="phone" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
-                                    required 
-                                    minlength="11"
-                                    maxlength="11"
+                                    minLength="11"
+                                    maxLength="11"
                             />
                             <label htmlFor="phone" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Telefono</label>
+                            {errors.phone?.message && <span>{errors.phone?.message}</span>}
                         </div>                        
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="password"
                                     name="password"
-                                    value={userData.password}
-                                    onChange={handleChange} 
+                                    {...register("password")}
                                     id="password" 
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
-                                    required 
-                                    minlength="6"
+                                    minLength="6"
                             />
                             <label htmlFor="password" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Contraseña</label>
+                            {errors.password?.message && <span>{errors.password?.message}</span>}
                         </div>
                         <button type="submit" className="text-white bg-[#d3850f] hover:bg-[#943800] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Enviar</button>
                     </form>

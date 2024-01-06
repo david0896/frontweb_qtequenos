@@ -8,9 +8,7 @@ export const setToken = (data, setAlert) => {
     return
 
   if(data.error?.status){  
-    if(data.error.status === 400)
-      setAlert(`Usuario o contraseña incorrectos`);
-
+    setAlert(data.error.status);
     return
   }
 
