@@ -49,7 +49,7 @@ export default function CardListProduct({products, addShoppingCart}) {
                 return( 
                     <div key={product.id} className=' p-5 rounded-3xl bg-[#eae7e8] space-y-3 my-8'>                        
                         <div className='lg:flex items-center justify-between'>
-                            <div className=''>
+                            <div className='w-[15rem]'>
                                 <Image width={1080} height={720} src={product.attributes.photo = null ? '' : product.attributes.photo} alt={`${product.attributes.name}`} className=' w-[10rem] p-5'/>
                             </div>
                             <div className='block mb-5 lg:mb-0 px-4'>

@@ -7,7 +7,8 @@ import ProductCard from "@/components/productCard";
 
 export default function CarruselProductCard({products}) {
 
-    const [windowWidth, setWindowWidth] = useState(0)
+    const [windowWidth, setWindowWidth] = useState(0);
+    console.log(products)
 
     useEffect(() => {
         const updateWindowDimensions = () => {
@@ -45,13 +46,16 @@ export default function CarruselProductCard({products}) {
         >
             <SplideTrack className='w-[30rem] h-[25rem] mx-auto'>
                 {   
-                    products &&(products.map(productView =>(
+                    products &&(products.data.map(productView =>(
+                        
                         <SplideSlide
                             key={productView.id}
                         >
                             <ProductCard
                                 key={productView.id}
-                                productView={productView}                                
+                                price={productView.attributes.price}
+                                photo={productView.attributes.photo}   
+                                title={productView.attributes.flavors.data[0].attributes.title}                             
                             />
                         </SplideSlide>
                     )))

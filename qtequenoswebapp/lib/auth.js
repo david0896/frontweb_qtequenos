@@ -6,9 +6,14 @@ import Alerta from '@/components/alert';
 export const setToken = (data, setAlert) => {
   if(!data)
     return
+ console.log('data')
+ console.log(data)
 
-  if(data.error?.status){  
-    setAlert(data.error.status);
+ 
+  if(data.error || data.error?.status){  
+    setAlert({message : data?.error + ' ' + data?.error?.status,
+              tipo    : 1        
+    });
     return
   }
 

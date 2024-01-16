@@ -3,7 +3,7 @@ import Header from "./header"
 import Footer from "./footer"
 import { UserProvider } from "@/lib/authContext"
 
-export default function Layout({user, loading = false, children, title = '', description = ''}) {
+export default function Layout({user, loading = false, children, title = '', description = '', shoppingCart}) {
   
   return (
     <UserProvider value={{ user, loading }}>
@@ -11,7 +11,7 @@ export default function Layout({user, loading = false, children, title = '', des
             <title>{`QTEQUEÑOS ${title}` }</title>
             <meta name="description" content={description}/>             
         </Head>
-        <Header/>
+        <Header shoppingCart={shoppingCart}/>
         <div>
           {children}
         </div>

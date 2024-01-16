@@ -7,12 +7,13 @@ import { useUser } from '../lib/authContext';
 import style from "../styles/styles.module.css";
 
 import NavAuthStrapi from './navAuthStrapi';
+import ShoppingCart from '@/pages/store/shoppingCart';
 
 const logout = () => {
     unsetToken();
   };
 
-export default function Header() {
+export default function Header({shoppingCart}) {
     const router = useRouter();
     const { pathname } = router;
     const [navbarOpen, setNavbarOpen] = useState(false);
@@ -80,12 +81,17 @@ export default function Header() {
                             ''
                             ))}
 
-                            <li>
+                            <li className='relative'>
                                 <Link href="/store/shoppingCart">
                                     <svg xmlns="http://www.w3.org/2000/svg" className={`${pathname === '/store/shoppingCart' ? 'fill-[#c21a7f]' : 'fill-gray-900'} hover:fill-[#c21a7f] ml-3 lg:ml-0 my-2 lg:my-0`} width="24" height="24" viewBox="0 0 24 24">
                                         <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                                     </svg>
                                 </Link>
+                                {
+                                    shoppingCart ?
+                                    <span className='absolute top-2 left-4 rounded-full bg-green-300 text-sm text-slate-900 p-1 px-3'>{shoppingCart.length}</span>
+                                    : null
+                                }
                             </li>                           
                             {/* <li className="hidden">
                                 <button id="mega-menu-icons-dropdown-button" data-dropdown-toggle="mega-menu-icons-dropdown" className="flex items-center justify-between w-full py-2 pl-3 pr-4 font-medium text-gray-900 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 ">

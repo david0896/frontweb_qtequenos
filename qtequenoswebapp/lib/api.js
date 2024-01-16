@@ -1,4 +1,4 @@
-export async function fetcher(url, option = {}){
+export async function fetcher(url, option = {}, setAlert = {}){
     let response;
     try {
         if(!option){
@@ -10,6 +10,10 @@ export async function fetcher(url, option = {}){
         return data;
     } catch (error) {
         console.log(error);
+        setAlert({
+            message: 'Ocurrio un error en la consulta',
+            tipo: 1
+        });
     }    
     
 }

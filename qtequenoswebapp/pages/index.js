@@ -6,19 +6,24 @@ import styles from '../styles/styles.module.css'
 import CarruselMain from "@/components/carruselMain";
 import CarruselProductCard from "@/components/carruselProductCard";
 import { useFetchUser } from '../lib/authContext';
+import {fetcher} from '../lib/api';
 
-export default function Home() {
+
+export default function Home({flavorProducts}) {
 
   const { user, loading } = useFetchUser();
-  
-  let productsFlavors = [
-    {"id":1,"imagen":"/img/tequenosQueso.png","titulo":"queso","precio":"10,00","url":"https://api.whatsapp.com/send/?phone=584122121462&text=Hola%20Ym2%20papelería%20quisiera%20mas%20información%20sobre%20estuche%20triangular%20safari%20exodus%20a19%20https://ibb.co/8smQ7v1"}
+ /*  let productsFlavors = [
+    {"id":1,
+    "imagen":"/img/tequenosQueso.png",
+    "titulo":"queso",
+    "precio":"10,00",
+    "url":"https://api.whatsapp.com/send/?phone=584122121462&text=Hola%20Ym2%20papelería%20quisiera%20mas%20información%20sobre%20estuche%20triangular%20safari%20exodus%20a19%20https://ibb.co/8smQ7v1"}
     ,    
     {"id":2,"imagen":"/img/tequenosQueso.png","titulo":"queso y guayaba","precio":"12,00","url":"https://api.whatsapp.com/send/?phone=584122121462&text=Hola%20Ym2%20papelería%20quisiera%20mas%20información%20sobre%20cava%20morral%20kavak%20relax%20https://ibb.co/drM7DDQ"}
     ,
     {"id":3,"imagen":"/img/tequenosQueso.png","titulo":"chocolate","precio":"10,50","url":"https://api.whatsapp.com/send/?phone=584122121462&text=Hola%20Ym2%20papelería%20quisiera%20mas%20información%20sobre%20bolso%20sport%20safari%20exodus%20a1918%20https://ibb.co/0MMCMNb"}
     ,
-  ];
+  ]; */
 
   return (
     <Layout
@@ -48,7 +53,7 @@ export default function Home() {
           </div>
           <div className="lg:col-span-3 p-10 -ml-[4rem] lg:ml-0 w-[42rem] mx-auto">
             <CarruselProductCard
-              products={productsFlavors}
+              products={flavorProducts}
             />
           </div>
         </div>
@@ -136,4 +141,13 @@ export default function Home() {
       </div> 
     </Layout>
   )
+}
+
+export async function getStaticProps(){
+  const flavorProducts = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/products?filters[name][$contains]=Gourmet&populate[flavors][fields][0]=title`);
+  return{
+      props:{
+        flavorProducts:flavorProducts
+      }
+  }
 }

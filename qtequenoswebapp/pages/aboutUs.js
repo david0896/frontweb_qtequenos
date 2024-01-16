@@ -3,7 +3,7 @@ import Layout from "@/components/layout";
 import { ParallaxBanner } from 'react-scroll-parallax';
 import { useFetchUser } from '../lib/authContext';
 
-export default function AboutUs() {
+export default function AboutUs({shoppingCart}) {
     const { user, loading } = useFetchUser();
 
     return (
@@ -11,6 +11,7 @@ export default function AboutUs() {
             user={user} 
             title={'Quienes somos'}
             description={'Informacipon de la empresa'}
+            shoppingCart={shoppingCart}
         >
             <div className="">
                 {/* <Image width={1080} height={720} src="https://i.postimg.cc/wMcBtzrL/banner-de-qteque-os-quienes-somos.webp" className='h-[25rem] object-cover w-screen' alt="Tequeños de queso"/>     */}

@@ -74,7 +74,9 @@ export default function Checkout({payMethods, alert, setAlert}) {
 
         if(responseData && !(responseData?.error?.status === 400)){
             //console.log(responseData)
-            setAlert('Los datos de tu confirmación de pago estan siendo revisados, Gracias por tu compra <3');
+            setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por tu compra <3',
+                      tipo    : 2
+            });
             Cookies.set('orderDetailCk', JSON.stringify({}));            
         }
     };

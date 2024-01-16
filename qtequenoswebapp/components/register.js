@@ -9,12 +9,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-/* const emailRegex     = '([\\w-+]+(?:\\.[\\w-+]+)*@(?:[\\w-]+\\.)+[a-zA-Z]{2,7})';
-const regex          = /^[vegjVEGJ0-9]$/;
-const phoneRegex     = /^[0-9]+$/;
-const textRegex      = new RegExp('^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$');
-const identidadRegex = /^[vegjVEGJ]\d{8}$/; */
-
 const Register = ({setAlert}) => {
     const {user, loading} = useFetchUser();
     const router = useRouter();
@@ -38,11 +32,8 @@ const Register = ({setAlert}) => {
       });
     
     const { register, handleSubmit, formState: { errors } } = useForm({
-        resolver: yupResolver(schema)
-        
+        resolver: yupResolver(schema)        
       });
-
-      console.log(errors.username?.message)
 
     const onSubmit = async userData => {
         try {
@@ -62,8 +53,9 @@ const Register = ({setAlert}) => {
                         password: userData.password,
                     }),
                     method: 'POST',
-                    }
+                    }, setAlert
                 );
+
                 setToken(responseData, setAlert);
             }
         } catch (error) {
@@ -72,8 +64,8 @@ const Register = ({setAlert}) => {
     };
 
     return (
-    <div className='bg-white w-[90%] lg:w-[60%] h-[80%] lg:h-[100%] rounded-3xl shadow-xl grid grid-cols-1 lg:grid-cols-5 z-10'>
-            <div className='relative col-span-3 overflow-hidden'>
+    <div className='bg-white w-[90%] lg:w-[60%] h-[80%] lg:h-auto rounded-3xl shadow-xl grid grid-cols-1 lg:grid-cols-5 z-10'>
+            <div className='relative col-span-3 h-auto overflow-hidden'>
                 <div className=' block lg:hidden absolute top-0 left-0 m-5 z-10'>
                     <Link 
                         href="#" 
@@ -104,7 +96,7 @@ const Register = ({setAlert}) => {
                     </h1>
                 </div>
             </div>
-            <div className='col-span-2 lg:p-10 grid content-center relative rounded-3xl'>
+            <div className='col-span-2 lg:p-10 grid h-auto content-center relative rounded-3xl'>
                 <div className=' bg-white -mt-[4rem] lg:mt-0 z-50 p-10 lg:p-0 rounded-3xl lg:rounded-none'>
                     <div className=' hidden lg:block absolute top-0 left-0 m-5'>
                         <Link 
@@ -128,7 +120,7 @@ const Register = ({setAlert}) => {
                                     placeholder=""  
                             />
                             <label htmlFor="username" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Usuario</label>
-                            {errors.username?.message && <span>{errors.username?.message}</span>}
+                            {errors.username?.message && <span className='text-[#721c24]'>{errors.username?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
@@ -139,7 +131,7 @@ const Register = ({setAlert}) => {
                                     placeholder="" 
                             />
                             <label htmlFor="name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nombre</label>
-                            {errors.name?.message && <span>{errors.name?.message}</span>}
+                            {errors.name?.message && <span className='text-[#721c24]'>{errors.name?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
@@ -150,7 +142,7 @@ const Register = ({setAlert}) => {
                                     placeholder=""                                  
                             />
                             <label htmlFor="lastname" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Apellido</label>
-                            {errors.lastname?.message && <span>{errors.lastname?.message}</span>}
+                            {errors.lastname?.message && <span className='text-[#721c24]'>{errors.lastname?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
@@ -161,7 +153,7 @@ const Register = ({setAlert}) => {
                                     placeholder="" 
                             />
                             <label htmlFor="document" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cedula/rif</label>
-                            {errors.document?.message && <span>{errors.document?.message}</span>}
+                            {errors.document?.message && <span className='text-[#721c24]'>{errors.document?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
@@ -173,7 +165,7 @@ const Register = ({setAlert}) => {
                                      
                             />
                             <label htmlFor="email" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Correo</label>
-                            {errors.email?.message && <span>{errors.email?.message}</span>}
+                            {errors.email?.message && <span className='text-[#721c24]'>{errors.email?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
@@ -186,7 +178,7 @@ const Register = ({setAlert}) => {
                                     maxLength="11"
                             />
                             <label htmlFor="phone" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Telefono</label>
-                            {errors.phone?.message && <span>{errors.phone?.message}</span>}
+                            {errors.phone?.message && <span className='text-[#721c24]'>{errors.phone?.message}</span>}
                         </div>                        
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="password"
@@ -198,7 +190,7 @@ const Register = ({setAlert}) => {
                                     minLength="6"
                             />
                             <label htmlFor="password" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Contraseña</label>
-                            {errors.password?.message && <span>{errors.password?.message}</span>}
+                            {errors.password?.message && <span className='text-[#721c24]'>{errors.password?.message}</span>}
                         </div>
                         <button type="submit" className="text-white bg-[#d3850f] hover:bg-[#943800] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Enviar</button>
                     </form>
