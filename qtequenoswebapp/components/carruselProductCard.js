@@ -5,7 +5,7 @@ import Image from 'next/image';
 import ProductCard from "@/components/productCard";
 
 
-export default function CarruselProductCard({products}) {
+export default function CarruselProductCard({products, addShoppingCart}) {
 
     const [windowWidth, setWindowWidth] = useState(0);
     console.log(products)
@@ -52,10 +52,13 @@ export default function CarruselProductCard({products}) {
                             key={productView.id}
                         >
                             <ProductCard
-                                key={productView.id}
-                                price={productView.attributes.price}
-                                photo={productView.attributes.photo}   
-                                title={productView.attributes.flavors.data[0].attributes.title}                             
+                                key   = {productView.id}
+                                id    = {productView.id}
+                                name  = {productView.attributes.name}
+                                price = {productView.attributes.price}
+                                photo = {productView.attributes.photo}   
+                                title = {productView.attributes.flavors.data[0].attributes.title} 
+                                addShoppingCart = {addShoppingCart}                            
                             />
                         </SplideSlide>
                     )))

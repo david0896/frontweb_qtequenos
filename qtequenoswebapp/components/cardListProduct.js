@@ -93,7 +93,7 @@ export default function CardListProduct({products, addShoppingCart}) {
                                         </svg>
                                     </button>
                                 </div>
-                                <input key={product.id} onClick={() => handleClick(product.id)} type="submit" value={`${added ? botonesSeleccionados.includes(product.id) ? 'PRODUCTO AGREGADO' : 'AGREGAR AL CARRITO' : 'AGREGAR AL CARRITO'}`} className={`${added ? botonesSeleccionados.includes(product.id) ? 'bg-[#3ab14e] hover:bg-[#286d33]' : 'bg-[#c21a7f] hover:bg-[#970b5f]' : 'bg-[#c21a7f] hover:bg-[#970b5f]'} mt-4 w-fit font-bold text-white focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}/>
+                                <input key={product.id} onClick={() => handleClick(product.id)} type="submit" value={`${added ? botonesSeleccionados.includes(product.id) ? 'PRODUCTO AGREGADO' : 'AGREGAR AL CARRITO' : 'AGREGAR AL CARRITO'}`} className={`${added ? botonesSeleccionados.includes(product.id) ? 'bg-[#3ab14e] hover:bg-[#286d33]' : 'bg-[#c21a7f] hover:bg-[#970b5f]' : 'bg-[#c21a7f] hover:bg-[#970b5f]'} mt-4 w-fit font-bold text-white focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-5 py-2.5 text-center inline-flex items-center `}/>
                             </form>                            
                         </div>
                     </div>

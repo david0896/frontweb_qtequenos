@@ -9,7 +9,7 @@ import { useFetchUser } from '../lib/authContext';
 import {fetcher} from '../lib/api';
 
 
-export default function Home({flavorProducts}) {
+export default function Home({flavorProducts, addShoppingCart}) {
 
   const { user, loading } = useFetchUser();
  /*  let productsFlavors = [
@@ -54,6 +54,7 @@ export default function Home({flavorProducts}) {
           <div className="lg:col-span-3 p-10 -ml-[4rem] lg:ml-0 w-[42rem] mx-auto">
             <CarruselProductCard
               products={flavorProducts}
+              addShoppingCart={addShoppingCart}
             />
           </div>
         </div>
