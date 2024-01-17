@@ -11,7 +11,7 @@ export default function ContactUs({shoppingCart}) {
             description={'Comunicate con nosotros de manera rapida y sencilla'} 
             shoppingCart={shoppingCart}
         >
-            <div className="bg-[#cccccc] relative">
+            <div className="relative">
                 <Image 
                     src="https://i.postimg.cc/VkX9hyCF/New-Project-2.jpg" 
                     width={4900} 
@@ -22,12 +22,12 @@ export default function ContactUs({shoppingCart}) {
                     quality={100}
                     blurDataURL
                     alt=""
-                    className=" w-screen"
+                    className="hidden lg:inline-block lg:w-screen"
                 />
-                <div className="absolute top-[50%] left-0 space-y-5 translate-x-[40%] -translate-y-[50%]">
-                    <h1 className=" text-5xl font-bold uppercase text-[#f5884d]">Contacto</h1>
-                    <p className="block text-xl font-medium text-gray-800">¿Quieres saber más sobre nuestros tequeños? <span className=" text-gray-600 block text-lg">¡Contáctanos, nos encantaría escucharte!</span></p>
-                    <div className="grid grid-cols-4 gap-7 pt-10">
+                <div className="px-5 mt-5 mb-16 lg:w-auto lg:my-0 lg:absolute lg:top-[50%] lg:left-0 lg:space-y-5 lg:translate-x-[40%] lg:-translate-y-[50%]">
+                    <h1 className=" text-center lg:text-left text-5xl font-bold uppercase text-[#f5884d] mb-3 lg:mb-0">Contacto</h1>
+                    <p className="block text-xl font-medium text-gray-800">¿Quieres saber más sobre nuestros tequeños? <span className=" pt-2 lg:pt-0 text-gray-600 block text-lg">¡Contáctanos, nos encantaría escucharte!</span></p>
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-7 pt-10">
                         <div className="col-span-2 space-y-5">
                             <div className="block">
                                 <h3 className="text-gray-800 text-lg font-semibold">Dirección</h3>
@@ -47,7 +47,7 @@ export default function ContactUs({shoppingCart}) {
                     </div>
                 </div>
             </div>
-            <div className="pb-[15rem]">
+            <div className="pb-[5rem] lg:pb-[15rem] px-5 mx-auto lg:w-9/12">
                 <h2 className=" text-center text-4xl font-semibold mb-4 text-[#c21a7f]">Póngase en contacto</h2>
                 <p className=" mb-16 text-center">¡No te pierdas nuestros deliciosos tequeños! Completa el formulario y descubre más.</p>
                 <form class=" max-w-lg mx-auto">

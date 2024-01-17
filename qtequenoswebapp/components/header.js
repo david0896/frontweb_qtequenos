@@ -89,7 +89,7 @@ export default function Header({shoppingCart}) {
                                 </Link>
                                 {
                                     shoppingCart ?
-                                    <span className='absolute top-2 left-4 rounded-full bg-[#ffac80] text-sm text-slate-900 font-semibold p-1 px-3'>{shoppingCart.length}</span>
+                                    <span className='absolute top-2 left-8 lg:left-4 rounded-full bg-[#ffac80] text-sm text-slate-900 font-semibold p-1 px-3'>{shoppingCart.length}</span>
                                     : null
                                 }
                             </li>                           
