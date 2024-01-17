@@ -27,7 +27,7 @@ export default function CarruselMain({user}) {
           <SplideTrack className='h-[20rem] lg:h-auto'>
             <SplideSlide>
                 <div className='relative'>
-                  <Image width={4096} height={720} src="https://i.postimg.cc/kMyzGMqk/Firefly-20240116144810.png" className='h-[20rem] lg:w-screen lg:h-full object-right-top' alt="Banner de tequeños en un plato"/>
+                  <Image width={4096} height={720} src="https://i.postimg.cc/9F7tgcLr/New-Project-3.jpg" className='h-[20rem] lg:w-screen lg:h-full object-right-top' alt="Banner de tequeños en un plato"/>
                   <div className='absolute top-0 left-0 w-screen lg:h-[80%]'>
                     <div className=' px-5 mx-auto lg:w-9/12 lg:h-full grid grid-cols-1 lg:grid-cols-4'> 
                       <div className=' col-span-2 hidden lg:grid content-center space-y-4'>                        

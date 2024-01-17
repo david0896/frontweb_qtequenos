@@ -188,6 +188,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
         <Layout 
             user={user}
             title="Carrito de compras"
+            shoppingCart={shoppingCart}
         >
             <main className="px-5 mt-10 mx-auto lg:w-9/12">
                 <h1 className="px-4 text-center lg:px-0 text-[#f5884d] block text-5xl lg:text-6xl my-10 uppercase font-extrabold">Carrito</h1>
@@ -201,7 +202,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                                     className={styles.producto}
                                 >
                                     <div>
-                                        <Image width={1080} height={720} src={product.image} alt={`imagen de producto ${product.name} `} className=' w-[10rem] p-5'/>
+                                        <Image width={1080} height={720} src={product.image} alt={`imagen de producto ${product.name} `} className='w-[20rem] p-0 lg:w-[10rem] lg:p-5'/>
                                     </div>
                                     <div>
                                         <p className={styles.nombre}>{product.name}</p>
@@ -251,7 +252,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                             <Link   
                                 href='#'
                                 onClick={createNewOrder} 
-                                className='mt-4 w-fit font-bold text-white bg-[#c21a7f] hover:bg-[#970b5f] focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+                                className='mt-4 w-fit font-bold text-white bg-[#c21a7f] hover:bg-[#970b5f] focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-5 py-2.5 text-center inline-flex items-center'
                             >Comprar ahora</Link> 
                             : '' 
                             :   <p className=' pt-4'>
