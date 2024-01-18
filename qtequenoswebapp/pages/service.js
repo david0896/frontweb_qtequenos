@@ -29,7 +29,8 @@ export default function Service({shoppingCart}) {
                                 <span className="text-[#f5884d] block text-7xl uppercase">fritos</span>
                             </h1>
                             <p className=" text-xl text-gray-800">
-                                Ahora llegamos a tu hogar u oficina con nuestros productos fritos ya listos para comer pídelos aquí. 
+                                Ahora llegamos a tu hogar u oficina con nuestros productos fritos ya listos para comer. 
+                                <span className="block mt-4">¡Pídelos aquí!</span>
                             </p>
                             <Link   
                                 href='/store'
@@ -38,7 +39,7 @@ export default function Service({shoppingCart}) {
                             <h2 className="pt-10 text-6xl lg:text-7xl uppercase my-10 text-[#c21a7f] font-bold">Eventos</h2>
                             <p className=" text-xl text-gray-800 block">
                                 ¿Tienes un evento?
-                                <span className="block">No importa el tamaño</span>
+                                <span className="block">¡No importa el tamaño!</span>
                             </p>
                             
                             <Link   

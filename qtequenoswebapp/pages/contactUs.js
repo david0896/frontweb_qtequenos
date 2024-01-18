@@ -13,7 +13,7 @@ export default function ContactUs({shoppingCart}) {
         >
             <div className="relative">
                 <Image 
-                    src="https://i.postimg.cc/VkX9hyCF/New-Project-2.jpg" 
+                    src="https://i.postimg.cc/kX7Jwn6W/teque-fritos.jpg" 
                     width={4900} 
                     height={5080} 
                     layout="responsive"
@@ -30,12 +30,8 @@ export default function ContactUs({shoppingCart}) {
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-7 pt-10">
                         <div className="col-span-2 space-y-5">
                             <div className="block">
-                                <h3 className="text-gray-800 text-lg font-semibold">Dirección</h3>
-                                <p>Av fffff Calle gggggg Local tttttt</p>
-                            </div>
-                            <div className="block">
                                 <h3 className="text-gray-800 text-lg font-semibold">Telefonos</h3>
-                                <p>0424 333 33 33</p>
+                                <p>0414 318 78 88</p>
                             </div>
                         </div>
                         <div className="col-span-2">
