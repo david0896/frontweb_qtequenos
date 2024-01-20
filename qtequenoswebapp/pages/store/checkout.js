@@ -3,10 +3,11 @@ import Layout from "@/components/layout";
 import Alerta from '@/components/alert';
 import { useFetchUser } from '../../lib/authContext';
 import { fetcher } from '../../lib/api';
+import { emailSend } from '@/lib/sendEmail';
 import {getTokenFromLocalCookie} from '../../lib/auth';
 import Cookies from 'js-cookie';
 
-export default function Checkout({payMethods, alert, setAlert}) {
+export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
     const [data, setData] = useState({
         deliveryAddress: 'Retiro en tienda',
         recipientsName: '',
@@ -29,7 +30,7 @@ export default function Checkout({payMethods, alert, setAlert}) {
     const [formDirection, setFormDirection] = useState(false);
     const [deshabilitado, setDeshabilitado] = useState(true);
     const {user, loading} = useFetchUser();
-    const orderDetail = JSON.parse(Cookies.get('orderDetailCk'));
+    const orderDetail = Cookies.get('orderDetailCk') ? JSON.parse(Cookies.get('orderDetailCk')) : {};
     const jwt = getTokenFromLocalCookie();
 
     const handleSubmit = async (e) => {
@@ -54,7 +55,6 @@ export default function Checkout({payMethods, alert, setAlert}) {
             orderDetail.deliveryAddress = data.deliveryAddress;
             orderDetail.recipientsName = data.recipientsName;
             Cookies.set('orderDetailCk', JSON.stringify(orderDetail));
-            console.log(orderDetail)
             setFormDirection(true);
         }
     };
@@ -85,11 +85,17 @@ export default function Checkout({payMethods, alert, setAlert}) {
         );
 
         if(responseData && !(responseData?.error?.status === 400)){
-            //console.log(responseData)
             setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por tu compra <3',
                       tipo    : 2
             });
-            Cookies.set('orderDetailCk', JSON.stringify({}));            
+            Cookies.remove('orderDetailCk');   
+            emailSend(setAlert, {
+                usuario : user,
+                detalleDeLaOrden : orderDetail,
+                infoPago : {referenciaBancaria : dataBankReference.BankReference,
+                banco : dataBankReference.Bank,
+                montoTransferido : dataBankReference.amountTransferred}
+            });                     
         }
     };
 
@@ -118,11 +124,16 @@ export default function Checkout({payMethods, alert, setAlert}) {
         );
 
         if(responseData && !(responseData?.error?.status === 400)){
-            //console.log(responseData)
             setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por tu compra <3',
                       tipo    : 2
             });
-            Cookies.set('orderDetailCk', JSON.stringify({}));            
+            Cookies.remove('orderDetailCk'); 
+            emailSend(setAlert, {
+                usuario : user,
+                detalleDeLaOrden : orderDetail,
+                infoPago : {correoZelle : dataZelleReference.zelleEmail,
+                            montoTransferido: dataZelleReference.amountTransferred}
+            });                       
         }
     };
 
@@ -151,10 +162,15 @@ export default function Checkout({payMethods, alert, setAlert}) {
 
         if(responseData && !(responseData?.error?.status === 400)){
             //console.log(responseData)
-            setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por tu compra <3',
+            setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por su compra',
                       tipo    : 2
             });
-            Cookies.set('orderDetailCk', JSON.stringify({}));            
+            Cookies.remove('orderDetailCk'); 
+            emailSend(setAlert,{
+                usuario : user,
+                detalleDeLaOrden : orderDetail,
+                infoPago : {pagoEfectivo : "Si"}
+            });                       
         }
     };
    
@@ -163,13 +179,14 @@ export default function Checkout({payMethods, alert, setAlert}) {
         <Layout 
             user={user}
             title="Checkout"
+            shoppingCart={shoppingCart}
         >
-            {alert ?
+            {alert !== '' ?
                 <Alerta
                     alert={alert}
                     setAlert={setAlert}
                 />
-                : null
+                : ''
             }
             <main className="px-5 mt-10 mx-auto lg:w-9/12">                
                 <h1 className="px-4 text-center lg:px-0 text-[#f5884d] block text-5xl lg:text-6xl my-5 uppercase font-extrabold">Checkout</h1>
@@ -364,7 +381,7 @@ export default function Checkout({payMethods, alert, setAlert}) {
                                 </div>
                             </div>
                         </div>
-                    : <p className='mt-10 mb-[20rem] text-center text-lg font-medium'>Upss no tienes ningun pedido por <span className=' font-bold'>Confirmación de pago</span>, agrega productos al carrito {`:)`}</p>
+                    : <p className='mt-10 mb-[20rem] text-center text-lg font-medium'>Upss no tienes ningun pedido por <span className=' font-bold'>Confirmación de pago</span>, agrega productos al carrito.</p>
                 }
             </main>
         </Layout>

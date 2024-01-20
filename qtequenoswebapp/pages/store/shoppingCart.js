@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Router from 'next/router';
 import Layout from "@/components/layout";
 import Image from "next/image";
+import Alerta from '@/components/alert';
 import { useFetchUser } from '../../lib/authContext';
 import styles from "../../styles/shoppingCart.module.css";
 import Link from 'next/link';
@@ -9,10 +10,11 @@ import { fetcher } from '../../lib/api';
 import {getTokenFromLocalCookie} from '../../lib/auth';
 import Cookies from 'js-cookie';
 
-export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuantity, deleteProduct, total, setTotal}) {
+export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuantity, deleteProduct, total, setTotal, alert, setAlert}) {
     const jwt = getTokenFromLocalCookie();
     const {user, loading} = useFetchUser();
     const [values, setValues] = useState(Array(shoppingCart.length).fill(0));
+    const orderDetailCk = Cookies.get('orderDetailCk');
     let orderDetail = {}
 
     useEffect(() => {
@@ -55,6 +57,15 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
     }
 
     const createNewOrder = async (e) => {
+
+        if (orderDetailCk) {
+            setAlert({
+                message : "Tienes un pedido activo por confirma su pago",
+                tipo: 1
+            })
+            return            
+        }
+
         e.preventDefault();
         try {
             const responseData = await fetcher(
@@ -75,22 +86,6 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
             );
             
             if(responseData){
-                // Router.push('/store/checkout')
-                /* shoppingCart.map((productA, index) => {
-
-                    if (!orderDetail.find(productB => productB.product === productA.name)) {
-                        setOrderDetail(prevProduct => [...prevProduct, {                          
-                            
-                            order           : responseData?.data?.id,
-                            quantity        : productA.quantity,
-                            totalPrice      : total,
-                            deliveryAddress : 'por aprobar',
-                            recipientsName  : '',
-                            product         : productA.name
-
-                        }]);
-                    }
-                }) */
                 orderDetail = {
                     order               : responseData?.data?.id,
                     totalPrice          : total,
@@ -134,62 +129,19 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
         }
     };
 
-    /* const createNewOrderDetail = async (orderDetail) => {
-        console.log('order detail desde create new')
-        console.log(orderDetail)
-        let objeto = orderDetail.reduce((obj, elemento, index) => {
-            obj[index] = elemento;
-            return obj;
-        }, {});
-
-        let objetoDeObjetos = orderDetail.reduce((obj, item, index) => {
-            obj[index] = item;
-            return obj;
-        }, {});
-        
-        // console.log("-----------")
-        // console.log(objeto)
-        // console.log("------json-----")
-        // console.log(JSON.stringify(objeto))
-
-        const objects = orderDetail.map((oD) => ({
-            ...oD
-          }));
-        
-        const body = JSON.stringify({ data: orderDetail });
-        
-        try {
-            const responseData = await fetcher(
-                `${process.env.NEXT_PUBLIC_STRAPI_URL}/order-details`,
-                {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${jwt}`,
-                },
-                body : JSON.stringify({
-                    data: {
-                        objetoDeObjetos                   
-                    },
-                }), 
-                method: 'POST',
-                }
-            );
-
-            if(responseData){
-                console.log(responseData)
-                // Router.push('/store/checkout')
-            }
-        } catch (error) {
-          console.error(error);
-        }
-    }; */
-
     return (
         <Layout 
             user={user}
             title="Carrito de compras"
             shoppingCart={shoppingCart}
         >
+            {alert ?
+                <Alerta
+                    alert={alert}
+                    setAlert={setAlert}
+                />
+                : ''
+            }
             <main className="px-5 mt-10 mx-auto lg:w-9/12">
                 <h1 className="px-4 text-center lg:px-0 text-[#f5884d] block text-5xl lg:text-6xl my-10 uppercase font-extrabold">Carrito</h1>
                 <div className={styles.contenido}>

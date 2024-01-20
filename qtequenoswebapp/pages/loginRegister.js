@@ -21,7 +21,7 @@ export default function LoginRegister({alert, setAlert}) {
                     alert={alert}
                     setAlert={setAlert}
                 />
-                : null
+                : ''
             }
             <div className="absolute inset-0 flex items-center justify-center py-5">
                 {form === 'login' ? 

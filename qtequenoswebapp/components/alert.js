@@ -13,7 +13,7 @@ const Alerta = ({ alert, setAlert }) => {
                 setTimeout(() => {
                 alerta.style.display = 'none';
                 }, 500);
-                setAlert(null)
+                setAlert('')
             };
             
             // Evento de click en el botón de cierre
@@ -25,7 +25,7 @@ const Alerta = ({ alert, setAlert }) => {
       }, []);
 
     return (
-    <div id='alerta' className={`${alert.tipo === 1 ? 'bg-[#f8d7da] text-[#721c24]' : 'bg-[#d7f8e7] text-[#1c721d]'} ${style.alerta} z-20 border-solid border-[1px]`}>
+    <div id='alerta' className={`${alert.tipo === 1 ? 'bg-[#f8d7da] text-[#721c24]' : 'bg-[#d7f8e7] text-[#1c721d]'} ${style.alerta} ${alert !== null || alert !== ''  ? 'block' : 'hidden'} z-20 border-solid border-[1px]`}>
         <button id='cerrar' className={style.cerrar}>x</button>
         <strong className="font-bold">Mensaje: </strong>
         <span className="block sm:inline">{alert.message}</span>
