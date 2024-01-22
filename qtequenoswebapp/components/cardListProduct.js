@@ -49,18 +49,20 @@ export default function CardListProduct({products, addShoppingCart}) {
                 return( 
                     <div key={product.id} className=' p-5 rounded-3xl bg-[#eae7e8] space-y-3 my-8'>                        
                         <div className='lg:flex items-center justify-between'>
-                            <div className='w-[15rem]'>
-                                <Image width={1080} height={720} src={product.attributes.photo = null ? '' : product.attributes.photo} alt={`${product.attributes.name}`} className=' w-[10rem] p-5'/>
-                            </div>
-                            <div className='block mb-5 lg:mb-0 px-4'>
-                                <div className='text-lg font-bold text-[rgb(75,75,75)] text-left mb-5'>
-                                    <h2 className=''>{product.attributes.name}</h2>
-                                    <span className='block'>{
-                                        populatePackage.map((packege)=>(packege.attributes.title))
-                                    }</span>
-                                    <span className='text-[#0e0e0e]'>Precio: ${product.attributes.price}</span>
+                            <div className='flex justify-start'>
+                                <div className='w-[10rem]'>
+                                    <Image width={1080} height={720} src={product.attributes.photo = null ? '' : product.attributes.photo} alt={`${product.attributes.name}`} className=' w-[10rem] p-5'/>
                                 </div>
-                                <span className='text-lg font-normal'>{product.attributes.description}</span>
+                                <div className='block mb-5 lg:mb-0 px-4 w-full'>
+                                    <div className='text-lg font-bold text-[rgb(75,75,75)] text-left mb-5'>
+                                        <h2 className=''>{product.attributes.name}</h2>
+                                        <span className='block'>{
+                                            populatePackage.map((packege)=>(packege.attributes.title))
+                                        }</span>
+                                        <span className='text-[#0e0e0e]'>Precio: ${product.attributes.price}</span>
+                                    </div>
+                                    <span className='text-lg font-normal'>{product.attributes.description}</span>
+                                </div>
                             </div>
                             <form onSubmit={handleSubmit(index, {
                                 id       : product.id = null ? '' : product.id,

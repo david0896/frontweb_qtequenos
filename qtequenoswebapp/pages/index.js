@@ -38,26 +38,28 @@ export default function Home({flavorProducts, shoppingCart, addShoppingCart}) {
       {/* seccion uno sabores */}
       <div className="px-5 mt-10 mx-auto lg:w-9/12 overflow-hidden lg:overflow-visible">
         <div className="grid grid-cols-1 lg:grid-cols-5">
-          <div className="lg:col-span-2 pb-10">
-            <h1 className=" text-5xl my-10 uppercase text-[#f5884d] font-bold">Sabores 
+          <div className="lg:col-span-2 lg:pb-10">
+            <h1 className=" text-center lg:text-left text-5xl my-10 uppercase text-[#f5884d] font-bold">Sabores 
               <span className="text-[#c21a7f] block">que </span>
               <span className="text-[#c21a7f] ">provocan </span>
             </h1>
-            <p className=" text-xl text-gray-800">
-            Descubre nuestra 
-            variedad de exquisitos 
-            rellenos que te 
-            transportarán a un 
-            mundo lleno de deleite 
-            y placer culinario
-            </p>
           </div>
-          <div className="lg:col-span-3 p-10 -ml-[4rem] lg:ml-0 w-[42rem] mx-auto">
+          <div className="lg:col-span-3 p-10 mx-auto">
+              <p className=" text-xl text-gray-800">
+                Descubre nuestra 
+                variedad de exquisitos 
+                rellenos que te 
+                transportarán a un 
+                mundo lleno de deleite 
+                y placer culinario
+              </p>
+          </div>
+          {/* <div className="lg:col-span-3 p-10 -ml-[4rem] lg:ml-0 w-[42rem] mx-auto">
             <CarruselProductCard
               products={flavorProducts}
               addShoppingCart={addShoppingCart}
             />
-          </div>
+          </div> */}
         </div>
       </div>
       {/* seccion banner 1*/}

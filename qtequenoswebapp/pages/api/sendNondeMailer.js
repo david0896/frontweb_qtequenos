@@ -19,6 +19,7 @@ export default async function (req, res) {
 
         from: 'qtequenoswebapp@outlook.com',
         to: 'qtequenoswebapp@outlook.com',
+        replyTo: 'ventas@qtequenos.com',
         subject: `Nuevo pedido`,
         text:'Información del pedido',
         html: `<html><body><p>Usuario : ${message.usuario} | Orden nº <strong>${message.detalleDeLaOrden.order}</strong></p><p><strong>Items :</strong> </p><p>${message.detalleDeLaOrden.productsAndQuantity}</p><p>Precio total del pedido: <strong>$${message.detalleDeLaOrden.totalPrice}</strong></p><p><strong>Información de despacho:</strong> </p><p>Dirección: ${message.detalleDeLaOrden.deliveryAddress}</p><p>Nombre de quien recibe: ${message.detalleDeLaOrden.recipientsName}</p><p><strong>Información de pago</strong></p><p> ${JSON.stringify(message.infoPago)}</p><p style="color:#bbbbbb">Mensaje enviado desde la web app qtequeños | No responder este mensaje</p></body></html>`,
