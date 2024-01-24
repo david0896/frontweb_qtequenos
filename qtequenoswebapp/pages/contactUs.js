@@ -92,15 +92,7 @@ export default function ContactUs({shoppingCart}) {
                 <button type="submit" className='mt-4 w-fit font-bold text-white bg-[#c21a7f] hover:bg-[#970b5f] focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-5 py-2.5 text-center inline-flex items-center'>Enviar</button>
                 </form>
             </div>
-            <div className=" w-screen">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d980.685297796671!2d-66.94218781604614!3d10.521039158930812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c2a5fc6433c59ef%3A0xf8775ac813cd6c36!2sQteque%C3%B1os!5e0!3m2!1ses!2sve!4v1706101877210!5m2!1ses!2sve" width="600"
-              height="450"
-              frameBorder="0"
-              style="border:0;"
-              allowFullScreen=""
-              aria-hidden="false"
-              tabIndex="0"></iframe>
-            </div>
+            
             
         </Layout>
     )
