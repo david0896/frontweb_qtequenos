@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import '@/styles/globals.css';
 import { ParallaxProvider } from 'react-scroll-parallax';
+import Maintenance from './maintenance';
 
 export default function App({ Component, pageProps }) {
   const shoppingCartLs = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('shoppingCart')) ?? []: [];
@@ -57,9 +58,7 @@ export default function App({ Component, pageProps }) {
     window.localStorage.setItem('shoppingCart', JSON.stringify( shoppingCart ));
   }
 
-  return ( 
-    readyPage ?
-      <ParallaxProvider>
+  {/* <ParallaxProvider>
         <Component 
           {...pageProps}
           shoppingCart={shoppingCart}
@@ -72,7 +71,11 @@ export default function App({ Component, pageProps }) {
           total={total}
           setTotal={setTotal}
         />    
-      </ParallaxProvider>
+      </ParallaxProvider> */}
+
+  return ( 
+    readyPage ?
+      <Maintenance/>      
     : null
   )
 }
