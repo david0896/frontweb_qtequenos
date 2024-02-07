@@ -58,7 +58,9 @@ export default function App({ Component, pageProps }) {
     window.localStorage.setItem('shoppingCart', JSON.stringify( shoppingCart ));
   }
 
-  {/* <ParallaxProvider>
+  return ( 
+    readyPage ?
+      <ParallaxProvider>
         <Component 
           {...pageProps}
           shoppingCart={shoppingCart}
@@ -71,11 +73,7 @@ export default function App({ Component, pageProps }) {
           total={total}
           setTotal={setTotal}
         />    
-      </ParallaxProvider> */}
-
-  return ( 
-    readyPage ?
-      <Maintenance/>      
+      </ParallaxProvider>    
     : null
   )
 }
