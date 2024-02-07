@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Layout from "@/components/layout";
 import { useFetchUser } from '../lib/authContext';
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ContactUs({shoppingCart}) {
     const { user, loading } = useFetchUser();
@@ -50,7 +51,7 @@ export default function ContactUs({shoppingCart}) {
                         <div className="col-span-2 space-y-5">
                             <div className="block w-[15rem]">
                                 <h3 className="text-gray-800 text-lg font-semibold">Dirección</h3>
-                                <p>Calle Primero de Mayo, Casa Numero 9 Alta Vista, Catia</p>
+                                <Link target="_blank" className="hover:text-[#c21a7f]" href="https://maps.app.goo.gl/n5sJNMGyK5FBg5Nu9">Calle Primero de Mayo, Casa Numero 9 Alta Vista, Catia</Link>
                             </div>
                             <div className="block">
                                 <h3 className="text-gray-800 text-lg font-semibold">Telefonos</h3>
