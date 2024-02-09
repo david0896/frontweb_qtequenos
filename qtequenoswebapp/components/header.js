@@ -57,11 +57,7 @@ export default function Header({shoppingCart}) {
                             </li>
                             {!loading &&
                             (user ? (
-                            <li>
-                                <Link className={`block py-2 pl-3 pr-4 ${pathname === '/profile' ? 'text-[#c21a7f]' : 'text-gray-900'} font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0`} href="/profile">
-                                    PERFIL
-                                </Link>
-                            </li>
+                                ''
                             ) : (
                             ''
                             ))}

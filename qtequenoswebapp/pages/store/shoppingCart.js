@@ -200,24 +200,34 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                         <h3 className='text-lg font-bold'>Resumen del pedido</h3>
                         <p>Total a pagar: <span>${total}</span></p>
                         {
-                            user ? shoppingCart ?
-                            <Link   
-                                href='#'
-                                onClick={createNewOrder} 
-                                className='mt-4 w-fit font-bold text-white bg-[#c21a7f] hover:bg-[#970b5f] focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-5 py-2.5 text-center inline-flex items-center'
-                            >Comprar ahora</Link> 
-                            : '' 
-                            :   <p className=' pt-4'>
-                                    Para completar tú compra: 
+                            user ? 
+                                shoppingCart ? 
+                                    orderDetailCk ? 
+                                        <div>
+                                            <Link   
+                                                href='/store/checkout'
+                                                className='mt-4 w-fit font-bold text-white bg-[#c21a7f] hover:bg-[#970b5f] focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-5 py-2.5 text-center inline-flex items-center'
+                                            >Finalizar compra anterior</Link> 
+                                            <p className=' text-zinc-600 text-sm mt-4'>Tienes una compra por finalizar actualmente, finalízala para poder iniciar una nueva compra</p>
+                                        </div>
+                                    :
                                     <Link   
-                                        href='/loginRegister?form=login' 
-                                        className='text-[#c21a7f] hover:text-[#970b5f] font-semibold'
-                                    > Inicia sesión</Link> ó 
-                                    <Link 
-                                        href='/loginRegister?form=register'
-                                        className='text-[#c21a7f] hover:text-[#970b5f] font-semibold'
-                                    > Registrate</Link>
-                                </p>
+                                        href='#'
+                                        onClick={createNewOrder} 
+                                        className='mt-4 w-fit font-bold text-white bg-[#c21a7f] hover:bg-[#970b5f] focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-5 py-2.5 text-center inline-flex items-center'
+                                    >Comprar ahora</Link> 
+                                : '' 
+                            :<p className=' pt-4'>
+                                Para completar tú compra: 
+                                <Link   
+                                    href='/loginRegister?form=login' 
+                                    className='text-[#c21a7f] hover:text-[#970b5f] font-semibold'
+                                > Inicia sesión</Link> ó 
+                                <Link 
+                                    href='/loginRegister?form=register'
+                                    className='text-[#c21a7f] hover:text-[#970b5f] font-semibold'
+                                > Registrate</Link>
+                            </p>
                         }
                     </aside>
                 </div>

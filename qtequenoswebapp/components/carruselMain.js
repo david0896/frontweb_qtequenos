@@ -8,9 +8,10 @@ export default function CarruselMain({user}) {
 
     const options = {
         type         : 'fade',
+        arrows       : false,
         rewind       : true,
         gap          : '1rem',
-        autoplay     : true,
+        autoplay     : false,
         pauseOnHover : false,
         resetProgress: false,
         height       : '30rem',
