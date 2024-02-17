@@ -12,6 +12,21 @@ export default function App({ Component, pageProps }) {
 
   const [quantity, setQuantity] = useState([]);
 
+  {/* <ParallaxProvider>
+    <Component 
+      {...pageProps}
+      shoppingCart={shoppingCart}
+      setShoppingCart={setShoppingCart}
+      addShoppingCart={addShoppingCart}
+      deleteProduct={deleteProduct}
+      updateQuantity={updateQuantity}
+      alert={alert}
+      setAlert={setAlert}
+      total={total}
+      setTotal={setTotal}
+    />    
+  </ParallaxProvider>  */}
+
   useEffect(() => {
     localStorage.setItem('shoppingCart', JSON.stringify( shoppingCart ));
   }, [shoppingCart])
@@ -60,20 +75,7 @@ export default function App({ Component, pageProps }) {
 
   return ( 
     readyPage ?
-      <ParallaxProvider>
-        <Component 
-          {...pageProps}
-          shoppingCart={shoppingCart}
-          setShoppingCart={setShoppingCart}
-          addShoppingCart={addShoppingCart}
-          deleteProduct={deleteProduct}
-          updateQuantity={updateQuantity}
-          alert={alert}
-          setAlert={setAlert}
-          total={total}
-          setTotal={setTotal}
-        />    
-      </ParallaxProvider>    
+      <Maintenance/>   
     : null
   )
 }
