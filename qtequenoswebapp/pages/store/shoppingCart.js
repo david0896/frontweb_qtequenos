@@ -84,17 +84,15 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                 method: 'POST',
                 }
             );
-            
             if(responseData){
                 orderDetail = {
                     order               : responseData?.data?.id,
+                    productsAndQuantity : shoppingCart.map((product) => {return `${product.name} x ${product.quantity}`} ).join(','),
                     totalPrice          : total,
                     deliveryAddress     : 'Retiro en tienda',
                     recipientsName      : '',
-                    productsAndQuantity : shoppingCart.map((product) => {return `${product.name} x ${product.quantity}`} ).join(',')
                 }                
                 createNewOrderDetail()
-
             }
         } catch (error) {
           console.error(error);
@@ -104,6 +102,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
     const createNewOrderDetail = async () => {
 
         try {
+            
             const responseData = await fetcher(
                 `${process.env.NEXT_PUBLIC_STRAPI_URL}/order-details`,
                 {
@@ -117,8 +116,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                 method: 'POST',
                 }
             );
-
-            if(responseData){
+            if(responseData){                
                 orderDetail.id = responseData.data.id;
                 Cookies.set('orderDetailCk', JSON.stringify(orderDetail));
                 setShoppingCart([]);
