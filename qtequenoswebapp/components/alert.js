@@ -29,7 +29,7 @@ const Alerta = ({ alert, setAlert }) => {
         <button id='cerrar' className={style.cerrar}>x</button>
         <strong className="font-bold">Mensaje: </strong>
         <span className="block sm:inline">{alert.message}</span>
-      </div>
+    </div>
     );
   };
   

@@ -9,7 +9,6 @@ export async function fetcher(url, option = {}, setAlert = {}){
         const data = await response.json();
         return data;
     } catch (error) {
-        console.log(error);
         setAlert({
             message: 'Ocurrio un error en la consulta',
             tipo: 1

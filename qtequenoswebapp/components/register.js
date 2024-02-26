@@ -12,19 +12,10 @@ import * as yup from 'yup';
 const Register = ({setAlert}) => {
     const {user, loading} = useFetchUser();
     const router = useRouter();
-    /* const [userData, setUserData] = useState({
-      username: '',
-      name: '',
-      lastname: '',
-      document: '',
-      email: '',
-      phone: '',
-      password: '',
-    }); */
     const schema = yup.object().shape({
         username: yup.string().trim().required('El campo es requerido'),
-        name: yup.string().required('El campo es requerido').matches(/^[A-Za-z]+$/, "Solo se permiten letras"),
-        lastname: yup.string().required('El campo es requerido').matches(/^[A-Za-z]+$/, "Solo se permiten letras"),
+        name: yup.string().trim().required('El campo es requerido').matches(/^[A-Za-z]+$/, "Solo se permiten letras"),
+        lastname: yup.string().trim().required('El campo es requerido').matches(/^[A-Za-z]+$/, "Solo se permiten letras"),
         document: yup.string().trim().required('El campo es requerido').matches(/^[jJvVeEgG]\d{8}$/, "Debe comenzar con jJ, vV, eE, gG seguido de 8 números"),
         email: yup.string().trim().required('El campo es requerido').email('Ingrese un correo valido como: ejemplo@next.com'),
         phone: yup.string().trim().required('El campo es requerido').matches(/^\d+$/, "Solo se permiten números").min(11, 'Debe ingresar minimo 11 caracteres'),
@@ -55,7 +46,6 @@ const Register = ({setAlert}) => {
                     method: 'POST',
                     }, setAlert
                 );
-
                 setToken(responseData, setAlert);
             }
         } catch (error) {
