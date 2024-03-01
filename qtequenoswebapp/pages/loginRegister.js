@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import Login from "@/components/login"
 import Register from "@/components/register"
 import Alerta from "@/components/alert"
+import Passwordrecovery from "@/components/passwordrecovery"
 
 export default function LoginRegister({alert, setAlert}) {
     const router = useRouter()
@@ -24,11 +25,16 @@ export default function LoginRegister({alert, setAlert}) {
                 : ''
             }
             <div className="absolute inset-0 flex items-center justify-center py-5">
-                {form === 'login' ? 
+                { form === 'login' ? 
                     <Login 
                         setAlert={setAlert}
-                    /> :
+                    /> 
+                : form === 'register' ?
                     <Register
+                        setAlert={setAlert}
+                    /> 
+                : 
+                    <Passwordrecovery
                         setAlert={setAlert}
                     />
                 }

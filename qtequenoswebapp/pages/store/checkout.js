@@ -6,8 +6,20 @@ import { fetcher } from '../../lib/api';
 import { emailSend } from '@/lib/sendEmail';
 import {getTokenFromLocalCookie} from '../../lib/auth';
 import Cookies from 'js-cookie';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
+    const schema = yup.object().shape({
+        email             : yup.string().trim().required('El campo es requerido').email('Ingrese un correo valido como: ejemplo@next.com'),
+        amountTransferred : yup.number('El campo admite solo numeros').required('El campo es requerido')
+    });
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(schema)        
+      });
+
+
     const [data, setData] = useState({
         deliveryAddress: 'Retiro en tienda',
         recipientsName: '',
@@ -33,7 +45,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
     const orderDetail = Cookies.get('orderDetailCk') ? JSON.parse(Cookies.get('orderDetailCk')) : {};
     const jwt = getTokenFromLocalCookie();
 
-    const handleSubmit = async (e) => {
+    const handleSubmitOrderDetail = async (e) => {
         e.preventDefault();
         const responseData = await fetcher(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/order-details/${orderDetail.id}`,
@@ -103,38 +115,43 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
         setDataBankReference({ ...dataBankReference, [e.target.name]: e.target.value });
     };
 
-    const handleSubmitZelleReference = async (e) => {
-        e.preventDefault();
-        const responseData = await fetcher(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${jwt}`,
-            },
-            body: JSON.stringify({data : {
-                zelleEmail: dataZelleReference.zelleEmail,
-                amountTransferred: dataZelleReference.amountTransferred,
-                amount: String(orderDetail.totalPrice),
-                order: String(orderDetail.order),
-            }}),
-          },
-          setAlert
-        );
+    const handleSubmitZelleReference = async zelleData => {
+        try {
+            if(zelleData){
+                const responseData = await fetcher(
+                `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions`,
+                {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${jwt}`,
+                    },
+                    body: JSON.stringify({data : {
+                        zelleEmail: zelleData.email,
+                        amountTransferred: zelleData.amountTransferred,
+                        amount: String(orderDetail.totalPrice),
+                        order: String(orderDetail.order),
+                    }}),
+                },
+                setAlert
+                );
 
-        if(responseData && !(responseData?.error?.status === 400)){
-            setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por tu compra <3',
-                      tipo    : 2
-            });
-            Cookies.remove('orderDetailCk'); 
-            emailSend(setAlert, {
-                usuario : user,
-                detalleDeLaOrden : orderDetail,
-                infoPago : {correoZelle : dataZelleReference.zelleEmail,
-                            montoTransferido: dataZelleReference.amountTransferred}
-            });                       
-        }
+                if(responseData && !(responseData?.error?.status === 400)){
+                    setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por tu compra <3',
+                            tipo    : 2
+                    });
+                    Cookies.remove('orderDetailCk'); 
+                    emailSend(setAlert, {
+                        usuario : user,
+                        detalleDeLaOrden : orderDetail,
+                        infoPago : {correoZelle : zelleData.zelleEmail,
+                                    montoTransferido: zelleData.amountTransferred}
+                    });                       
+                }
+            }
+    } catch (error) {
+    console.error(error);
+    }
     };
 
     const handleChangeZelleReference = (e) => {
@@ -200,7 +217,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                                         !formDirection ? 
                                             <div>
                                                 <h2 className='text-2xl text-[#f5884d] font-semibold'>Información de retiro del pedido</h2>
-                                                <form onSubmit={handleSubmit} className="mt-5 lg:pr-[10rem]">
+                                                <form onSubmit={handleSubmitOrderDetail} className="mt-5 lg:pr-[10rem]">
                                                     <fieldset>
                                                         <div className="flex items-center mb-4">
                                                         <input id="country-option-1" onClick={()=>{setDeshabilitado(true);
@@ -338,28 +355,30 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                                                     </label>
                                                 </div>
                                                 {zelleReference ? 
-                                                    <form onSubmit={handleSubmitZelleReference} className="mt-5 ">
+                                                    <form onSubmit={handleSubmit(handleSubmitZelleReference)}  className="mt-5 ">
                                                         <div className="relative z-0 w-full mb-5 group ">
-                                                            <input  type="text"
-                                                                    name="zelleEmail"
-                                                                    onChange={handleChangeZelleReference} 
-                                                                    id="zelleEmail" 
-                                                                    className={` block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer`} 
-                                                                    placeholder="" 
-                                                                    required
-                                                            />
+                                                        <input  
+                                                            type="text"
+                                                            name="email"
+                                                            {...register("email")}
+                                                            id="email" 
+                                                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
+                                                            placeholder=""                                                             
+                                                        />
                                                             <label htmlFor="zelleEmail" className={`peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}>Correo del que envía</label>
+                                                            {errors?.email?.message && <span className='text-[#721c24]'>{errors?.email?.message}</span>}
                                                         </div>
                                                         <div className="relative z-0 w-full mb-5 group ">
-                                                            <input  type="text"
-                                                                    name="amountTransferred"
-                                                                    onChange={handleChangeZelleReference} 
-                                                                    id="amountTransferred" 
-                                                                    className={` block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer`} 
-                                                                    placeholder="" 
-                                                                    required
+                                                            <input  
+                                                                type="text"
+                                                                name="amountTransferred"
+                                                                id="amountTransferred" 
+                                                                {...register("amountTransferred")}
+                                                                className={` block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer`} 
+                                                                placeholder=""
                                                             />
                                                             <label htmlFor="amountTransferred" className={`peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}>Monto transferido</label>
+                                                            {errors?.amountTransferred?.message && <span className='text-[#721c24]'>{errors?.amountTransferred?.message}</span>}
                                                         </div>
                                                         <button type="submit" className={`bg-[#d3850f] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar pago</button>
                                                     </form>
