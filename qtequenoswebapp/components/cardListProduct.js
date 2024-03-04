@@ -35,7 +35,6 @@ export default function CardListProduct({products, addShoppingCart}) {
             alert('Cantidad no validad');
             return
         }       
-
         addShoppingCart(selectProduct);
         setAdded(true);
     }

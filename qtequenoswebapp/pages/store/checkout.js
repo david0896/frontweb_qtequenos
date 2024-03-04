@@ -71,6 +71,32 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
         }
     };
 
+    const updateStatusOrder = async (e) => {
+        e.preventDefault();
+        const responseData = await fetcher(
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/order/${orderDetail.id}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${jwt}`,
+            },
+            body: JSON.stringify({data : {
+                deliveryAddress: data.deliveryAddress,
+                recipientsName: data.recipientsName,
+            }}),
+          },
+          setAlert
+        );
+
+        if(responseData){
+            orderDetail.deliveryAddress = data.deliveryAddress;
+            orderDetail.recipientsName = data.recipientsName;
+            Cookies.set('orderDetailCk', JSON.stringify(orderDetail));
+            setFormDirection(true);
+        }
+    }; // Finalizar el cambio de status a pagado
+
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
@@ -118,6 +144,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
     const handleSubmitZelleReference = async zelleData => {
         try {
             if(zelleData){
+
                 const responseData = await fetcher(
                 `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions`,
                 {
@@ -144,7 +171,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                     emailSend(setAlert, {
                         usuario : user,
                         detalleDeLaOrden : orderDetail,
-                        infoPago : {correoZelle : zelleData.zelleEmail,
+                        infoPago : {correoZelle : zelleData.email,
                                     montoTransferido: zelleData.amountTransferred}
                     });                       
                 }
