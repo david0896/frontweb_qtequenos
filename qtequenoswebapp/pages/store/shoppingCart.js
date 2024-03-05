@@ -15,10 +15,10 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
     const {user, loading} = useFetchUser();
     const [values, setValues] = useState(Array(shoppingCart.length).fill(0));
     const orderDetailCk = Cookies.get('orderDetailCk');
-    let orderDetail = {}
+    let orderDetail = {}    
 
     useEffect(() => {
-        setValue(shoppingCart)        
+        setValue(shoppingCart)       
       }, []);
     
     useEffect(()=>{
@@ -199,7 +199,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                         <p>Total a pagar: <span>${total}</span></p>
                         {
                             user ? 
-                                shoppingCart ? 
+                                shoppingCart.length > 0 ? 
                                     orderDetailCk ? 
                                         <div>
                                             <Link   
@@ -214,7 +214,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                                         onClick={createNewOrder} 
                                         className='mt-4 w-fit font-bold text-white bg-[#c21a7f] hover:bg-[#970b5f] focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-5 py-2.5 text-center inline-flex items-center'
                                     >Comprar ahora</Link> 
-                                : '' 
+                                : <p className=' text-slate-700 text-sm'>Agrega productos al carrito para comprar ahora...</p>
                             :<p className=' pt-4'>
                                 Para completar tú compra: 
                                 <Link   
