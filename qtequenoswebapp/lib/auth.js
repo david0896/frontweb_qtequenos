@@ -34,8 +34,7 @@ export const unsetToken = () => {
   Cookies.remove('id');
   Cookies.remove('jwt');
   Cookies.remove('username');
-
-  Router.reload('/');
+  Router.push('/');
 };
 
 export const getUserFromLocalCookie = () => {
