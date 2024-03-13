@@ -401,10 +401,10 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                                     }
                                     <div className=' border-[1px] border-[#cfcfcf] mt-5 p-2 rounded-lg font-medium text-[#6c6c6c]'>
                                         <p>
-                                            Tus Q'puntos: <span className='font-semibold'>{availablePoints}</span>
+                                            Tus Q&apos;puntos: <span className='font-semibold'>{availablePoints}</span>
                                         </p>
                                         <p>
-                                            Q'puntos a ganar: <span className='font-semibold text-green-700'>+{orderDetail.pointsEarned}</span>
+                                            Q&apos;puntos a ganar: <span className='font-semibold text-green-700'>+{orderDetail.pointsEarned}</span>
                                         </p>
                                     </div> 
                                 </div>
@@ -420,7 +420,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                                         <div className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between'>
                                             Total a pagar: <span className='text-xl font-semibold'>$ {orderDetail.totalPrice}</span>
                                         </div>
-                                        <div className='mb-5 text-right'><span className={`text-base font-semibold ${availablePoints >= orderDetail.totalPriceInPoints ? "text-green-700" : "text-red-600"}`}>Q'puntos {orderDetail.totalPriceInPoints}</span></div>
+                                        <div className='mb-5 text-right'><span className={`text-base font-semibold ${availablePoints >= orderDetail.totalPriceInPoints ? "text-green-700" : "text-red-600"}`}>Q&apos;puntos {orderDetail.totalPriceInPoints}</span></div>
                                         {formDirection ? 
                                             <div>
                                                 <p className=' text-base font-medium mb-5'>Localización de entrega: <span className='text-sm font-normal'>{orderDetail.deliveryAddress}</span></p>
@@ -521,7 +521,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                                                 <div className="flex items-center my-4">
                                                     <input id="country-option-1" onClick={()=>{setPayPointReference(true);setCashReference(false);setZelleReference(false);setBankReference(false)}} type="radio" name="countries" value="zelle" className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"/>
                                                     <label htmlFor="country-option-1" className="block ms-2  text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                        Q'puntos
+                                                        Q&apos;puntos
                                                     </label>
                                                 </div>
                                                 {payPointReference ?

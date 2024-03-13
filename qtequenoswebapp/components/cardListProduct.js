@@ -58,7 +58,7 @@ export default function CardListProduct({products, addShoppingCart}) {
                                         <span className='block'>{
                                             populatePackage.map((packege)=>(packege.attributes.title))
                                         }</span>
-                                        <span className='text-[#0e0e0e]'>Precio: ${product.attributes.price} <span className='text-[#777777] font-medium'>|</span> Q'puntos: {product.attributes.priceInPoints}</span>
+                                        <span className='text-[#0e0e0e]'>Precio: ${product.attributes.price} <span className='text-[#777777] font-medium'>|</span> Q&apos;puntos: {product.attributes.priceInPoints}</span>
                                     </div>
                                     <span className='text-lg font-normal'>{product.attributes.description}</span>
                                 </div>

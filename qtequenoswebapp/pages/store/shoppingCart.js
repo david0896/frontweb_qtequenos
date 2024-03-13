@@ -160,7 +160,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                                     </div>
                                     <div>
                                         <p className={styles.nombre}>{product.name}</p>
-                                        <p className={styles.precio}>$<span>{product.price} | </span>Q'puntos: <span>{product.priceInPoints}</span></p>
+                                        <p className={styles.precio}>$<span>{product.price} | </span>Q&apos;puntos: <span>{product.priceInPoints}</span></p>
                                         <div>
                                             <label htmlFor="bedrooms-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Elegir cantidad:</label>
                                             <div className="relative flex items-center max-w-[11rem] mb-1">
@@ -185,7 +185,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                                                 </button>
                                             </div>
                                         </div>
-                                        <p className={styles.subtotal}>Subtotal: <span>${values[index] * product.price}</span> | <span>Q'puntos: {values[index] * product.priceInPoints}</span></p>
+                                        <p className={styles.subtotal}>Subtotal: <span>${values[index] * product.price}</span> | <span>Q&apos;puntos: {values[index] * product.priceInPoints}</span></p>
                                     </div>
                                     <button
                                         className={styles.eliminar}
@@ -200,7 +200,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                     </div>
                     <aside className={`${styles.resumen} mb-10`}>
                         <h3 className='text-lg font-bold'>Resumen del pedido</h3>
-                        <p>Total a pagar: <span>${total}</span> | Q'puntos <span>{totalPoints}</span></p>
+                        <p>Total a pagar: <span>${total}</span> | Q&apos;puntos <span>{totalPoints}</span></p>
                         {
                             user ? 
                                 shoppingCart.length > 0 ? 
@@ -240,7 +240,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                             </p>
                         }
                         {shoppingCart.length > 0 ?
-                            <p className=' border-[1px] border-[#cfcfcf] mt-5 p-2 rounded-lg font-medium text-[#6c6c6c]'>Q'puntos a ganar: <span className='font-semibold text-green-700'>+{total * pointsForDollar.data.attributes.pointsForDollar}</span></p>
+                            <p className=' border-[1px] border-[#cfcfcf] mt-5 p-2 rounded-lg font-medium text-[#6c6c6c]'>Q&apos;puntos a ganar: <span className='font-semibold text-green-700'>+{total * pointsForDollar.data.attributes.pointsForDollar}</span></p>
                         : ""
                         }
                     </aside>
