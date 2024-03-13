@@ -33,8 +33,8 @@ export default function Index({frozenProducts, friedProducts, shoppingCart, addS
 }
 
 export async function getServerSideProps(){
-    const frozenProducts = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/products?filters[name][$notContains]=fritos&fields[0]=name&fields[1]=description&fields[3]=price&fields[4]=photo&populate[packages][fields][0]=title&sort=sortfield`);
-    const friedProducts = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/products?filters[name][$containsi]=fritos&fields[0]=name&fields[1]=description&fields[3]=price&fields[4]=photo&populate[packages][fields][0]=title&sort=sortfield`);
+    const frozenProducts = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/products?filters[name][$notContains]=fritos&fields[0]=name&fields[1]=description&fields[2]=price&fields[3]=priceInPoints&fields[4]=photo&populate[packages][fields][0]=title&sort=sortfield`);
+    const friedProducts = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/products?filters[name][$containsi]=fritos&fields[0]=name&fields[1]=description&fields[2]=price&fields[3]=priceInPoints&fields[4]=photo&populate[packages][fields][0]=title&sort=sortfield`);
     return{
         props:{
             frozenProducts:frozenProducts,

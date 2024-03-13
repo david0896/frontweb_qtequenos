@@ -17,7 +17,7 @@ export default function LoginRegister({alert, setAlert}) {
                    alt="Background image" 
                    className="w'screen h-screen object-center"
             />
-            {alert ?
+            {Object.keys(alert).length !== 0 ?
                 <Alerta
                     alert={alert}
                     setAlert={setAlert}

@@ -9,10 +9,9 @@ export default function App({ Component, pageProps }) {
   const [readyPage, setReadyPage] = useState(false);
   const [alert, setAlert] = useState({});
   const [total, setTotal] = useState(0);
+  const [totalPoints, setTotalPoints] = useState(0);
 
-  const [quantity, setQuantity] = useState([]);
-
-  
+  //const [quantity, setQuantity] = useState([]);
 
   useEffect(() => {
     localStorage.setItem('shoppingCart', JSON.stringify( shoppingCart ));
@@ -22,7 +21,6 @@ export default function App({ Component, pageProps }) {
     setReadyPage(true);
   }, [])
   
-
   const addShoppingCart = (product) => {
     // Comprobar si la product ya esta en el carrito...
     if(shoppingCart.some( productState =>  productState.id === product.id )) {
@@ -74,6 +72,8 @@ export default function App({ Component, pageProps }) {
           setAlert={setAlert}
           total={total}
           setTotal={setTotal}
+          totalPoints={totalPoints}
+          setTotalPoints={setTotalPoints}
         />    
       </ParallaxProvider>     
     : null

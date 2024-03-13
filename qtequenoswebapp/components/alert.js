@@ -13,7 +13,7 @@ const Alerta = ({ alert, setAlert }) => {
                 setTimeout(() => {
                 alerta.style.display = 'none';
                 }, 500);
-                setAlert('')
+                setAlert({})
             };
             
             // Evento de click en el botón de cierre
@@ -22,7 +22,7 @@ const Alerta = ({ alert, setAlert }) => {
             // Cerrar la alerta después de 5 segundos (5000 milisegundos)
             setTimeout(cerrarAlerta, 5000);
         }
-      }, []);
+      }, [alert]);
 
     return (
     <div id='alerta' className={`${alert.tipo === 1 ? 'bg-[#f8d7da] text-[#721c24]' : 'bg-[#d7f8e7] text-[#1c721d]'} ${style.alerta} ${alert !== null || alert !== ''  ? 'block' : 'hidden'} z-20 border-solid border-[1px]`}>

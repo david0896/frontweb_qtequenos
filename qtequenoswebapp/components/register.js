@@ -46,11 +46,37 @@ const Register = ({setAlert}) => {
                     method: 'POST',
                     }, setAlert
                 );
-                setToken(responseData, setAlert);
+
+                console.log(responseData)
+
+                if(responseData){
+                    if(responseData?.user?.confirmed)
+                        setRecordPoints(responseData?.jwt, responseData?.username);
+
+                    setToken(responseData, setAlert);                    
+                }
+                            
             }
         } catch (error) {
           console.error(error);
         }
+    };
+
+    const setRecordPoints = async (jwt, user) => {
+        const responseData = await fetcher(
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/record-points`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${jwt}`,
+            },
+            body: JSON.stringify({data : {
+                username: user
+            }}),
+          },
+          setAlert
+        );
     };
 
     return (

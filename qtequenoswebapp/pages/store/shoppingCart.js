@@ -10,20 +10,22 @@ import { fetcher } from '../../lib/api';
 import {getTokenFromLocalCookie} from '../../lib/auth';
 import Cookies from 'js-cookie';
 
-export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuantity, deleteProduct, total, setTotal, alert, setAlert}) {
+export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuantity, deleteProduct, total, setTotal, totalPoints, setTotalPoints, pointsForDollar, alert, setAlert}) {
     const jwt = getTokenFromLocalCookie();
     const {user, loading} = useFetchUser();
     const [values, setValues] = useState(Array(shoppingCart.length).fill(0));
     const orderDetailCk = Cookies.get('orderDetailCk');
-    let orderDetail = {}    
+    let orderDetail = {}  
 
     useEffect(() => {
-        setValue(shoppingCart)       
+        setValue(shoppingCart)    
       }, []);
     
     useEffect(()=>{
         const totalCalculation = shoppingCart.reduce((total, product)=> total + (product.quantity * product.price), 0);
+        const totalCalculationPoints = shoppingCart.reduce((total, product)=> total + (product.quantity * product.priceInPoints), 0);
         setTotal(totalCalculation);
+        setTotalPoints(totalCalculationPoints);
     }, [shoppingCart])
 
     const incrementValue = (index, id) => {
@@ -91,6 +93,8 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                     totalPrice          : total,
                     deliveryAddress     : 'Retiro en tienda',
                     recipientsName      : '',
+                    totalPriceInPoints  : totalPoints,
+                    pointsEarned        : total * pointsForDollar.data.attributes.pointsForDollar,
                 }                
                 createNewOrderDetail()
             }
@@ -117,10 +121,10 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                 }
             );
             if(responseData){                
-                orderDetail.id = responseData.data.id;
+                orderDetail.id = responseData.data.id; //refactorizar y enviar el id por la url a checkout page, no usar cookies
                 Cookies.set('orderDetailCk', JSON.stringify(orderDetail));
                 setShoppingCart([]);
-                Router.push('/store/checkout');
+                Router.push(`/store/checkout`);
             }
         } catch (error) {
           console.error(error);
@@ -133,7 +137,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
             title="Carrito de compras"
             shoppingCart={shoppingCart}
         >
-            {alert ?
+            {alert != '' ?
                 <Alerta
                     alert={alert}
                     setAlert={setAlert}
@@ -156,7 +160,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                                     </div>
                                     <div>
                                         <p className={styles.nombre}>{product.name}</p>
-                                        <p className={styles.precio}>$<span>{product.price}</span></p>
+                                        <p className={styles.precio}>$<span>{product.price} | </span>Q'puntos: <span>{product.priceInPoints}</span></p>
                                         <div>
                                             <label htmlFor="bedrooms-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Elegir cantidad:</label>
                                             <div className="relative flex items-center max-w-[11rem] mb-1">
@@ -181,7 +185,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                                                 </button>
                                             </div>
                                         </div>
-                                        <p className={styles.subtotal}>Subtotal: <span>${values[index] * product.price}</span></p>
+                                        <p className={styles.subtotal}>Subtotal: <span>${values[index] * product.price}</span> | <span>Q'puntos: {values[index] * product.priceInPoints}</span></p>
                                     </div>
                                     <button
                                         className={styles.eliminar}
@@ -196,11 +200,11 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                     </div>
                     <aside className={`${styles.resumen} mb-10`}>
                         <h3 className='text-lg font-bold'>Resumen del pedido</h3>
-                        <p>Total a pagar: <span>${total}</span></p>
+                        <p>Total a pagar: <span>${total}</span> | Q'puntos <span>{totalPoints}</span></p>
                         {
                             user ? 
                                 shoppingCart.length > 0 ? 
-                                    orderDetailCk ? 
+                                    orderDetailCk && Object.keys(JSON.parse(orderDetailCk)).length !== 0  ? 
                                         <div>
                                             <Link   
                                                 href='/store/checkout'
@@ -214,7 +218,15 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                                         onClick={createNewOrder} 
                                         className='mt-4 w-fit font-bold text-white bg-[#c21a7f] hover:bg-[#970b5f] focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-5 py-2.5 text-center inline-flex items-center'
                                     >Comprar ahora</Link> 
-                                : <p className=' text-slate-700 text-sm'>Agrega productos al carrito para comprar ahora...</p>
+                                : orderDetailCk && Object.keys(JSON.parse(orderDetailCk)).length !== 0  ? 
+                                    <div>
+                                        <Link   
+                                            href='/store/checkout'
+                                            className='mt-4 w-fit font-bold text-white bg-[#c21a7f] hover:bg-[#970b5f] focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-5 py-2.5 text-center inline-flex items-center'
+                                        >Finalizar compra anterior</Link> 
+                                        <p className=' text-zinc-600 text-sm mt-4'>Tienes una compra por finalizar actualmente, finalízala para poder iniciar una nueva compra</p>
+                                    </div>
+                                :<p className=' text-slate-700 text-sm'>Agrega productos al carrito para comprar ahora...</p>
                             :<p className=' pt-4'>
                                 Para completar tú compra: 
                                 <Link   
@@ -227,10 +239,23 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                                 > Registrate</Link>
                             </p>
                         }
+                        {shoppingCart.length > 0 ?
+                            <p className=' border-[1px] border-[#cfcfcf] mt-5 p-2 rounded-lg font-medium text-[#6c6c6c]'>Q'puntos a ganar: <span className='font-semibold text-green-700'>+{total * pointsForDollar.data.attributes.pointsForDollar}</span></p>
+                        : ""
+                        }
                     </aside>
                 </div>
             </main>
             
         </Layout>
     )
+}
+
+export async function getServerSideProps(){
+    const pointsForDollar = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/config-parameters/1`);
+    return{
+        props:{
+            pointsForDollar:pointsForDollar,
+        }
+    }
 }

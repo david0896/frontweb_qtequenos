@@ -58,17 +58,18 @@ export default function CardListProduct({products, addShoppingCart}) {
                                         <span className='block'>{
                                             populatePackage.map((packege)=>(packege.attributes.title))
                                         }</span>
-                                        <span className='text-[#0e0e0e]'>Precio: ${product.attributes.price}</span>
+                                        <span className='text-[#0e0e0e]'>Precio: ${product.attributes.price} <span className='text-[#777777] font-medium'>|</span> Q'puntos: {product.attributes.priceInPoints}</span>
                                     </div>
                                     <span className='text-lg font-normal'>{product.attributes.description}</span>
                                 </div>
                             </div>
                             <form onSubmit={handleSubmit(index, {
-                                id       : product.id = null ? '' : product.id,
-                                name     : product.attributes.name = null ? '' : product.attributes.name,
-                                price    : product.attributes.price = null ? '' : product.attributes.price,
-                                quantity : values[index],
-                                image    : product.attributes.photo = null ? '' : product.attributes.photo
+                                id              : product.id = null ? '' : product.id,
+                                name            : product.attributes.name = null ? '' : product.attributes.name,
+                                price           : product.attributes.price = null ? '' : product.attributes.price,
+                                priceInPoints   : product.attributes.priceInPoints = null ? '' : product.attributes.priceInPoints,
+                                quantity        : values[index],
+                                image           : product.attributes.photo = null ? '' : product.attributes.photo
                             })} 
                                 className="max-w-xs"
                             >

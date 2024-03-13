@@ -66,6 +66,11 @@
     color: rgb(27, 27, 27);
 }
 
+.subtotal span:nth-of-type(2){
+    font-size: 1.1rem;
+    color: rgb(61, 61, 61);
+}
+
 .resumen{
     background-color: #f9fafb;
     padding: 3rem;

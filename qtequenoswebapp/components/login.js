@@ -28,7 +28,8 @@ const Login = ({setAlert}) => {
               identifier: data.identifier,
               password: data.password,
             }),
-          }
+          },
+          setAlert
         );
     
         setToken(responseData, setAlert);

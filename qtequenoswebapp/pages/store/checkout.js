@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 import Layout from "@/components/layout";
 import Alerta from '@/components/alert';
 import { useFetchUser } from '../../lib/authContext';
@@ -18,8 +18,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)        
       });
-
-
+   
     const [data, setData] = useState({
         deliveryAddress: 'Retiro en tienda',
         recipientsName: '',
@@ -29,21 +28,22 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
         BankReference: '',
         amountTransferred: ''
     });
-    const [dataZelleReference, setDataZelleReference] = useState({
-        zelleEmail: '',
-        amountTransferred: ''
-    });
-    const [dataCashReference, setDataCashReference] = useState({
-        cash: ''
-    });
     const [bankReference, setBankReference] = useState(false);
     const [zelleReference, setZelleReference] = useState(false);
     const [cashReference, setCashReference] = useState(false);
+    const [payPointReference, setPayPointReference] = useState(false);
     const [formDirection, setFormDirection] = useState(false);
     const [deshabilitado, setDeshabilitado] = useState(true);
+    const [availablePoints, setAvailablePoints] = useState(0);
+    const [totalPointsSpent, setTotalPointsSpent] = useState(0);
+    const [idRecordPoint,setIdRecordPoint] = useState(0);
     const {user, loading} = useFetchUser();
     const orderDetail = Cookies.get('orderDetailCk') ? JSON.parse(Cookies.get('orderDetailCk')) : {};
-    const jwt = getTokenFromLocalCookie();
+    const jwt = getTokenFromLocalCookie();  
+    
+    useEffect(() => {
+        getRecordPoints() 
+    }, [user])
 
     const handleSubmitOrderDetail = async (e) => {
         e.preventDefault();
@@ -103,6 +103,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
 
     const handleSubmitBankReference = async (e) => {
         e.preventDefault();
+        setRecordPoints();
         const responseData = await fetcher(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions`,
           {
@@ -115,8 +116,8 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                 bankReference: dataBankReference.BankReference,
                 bank: dataBankReference.Bank,
                 amountTransferred: dataBankReference.amountTransferred,
-                amount: String(orderDetail.totalPrice),
-                order: String(orderDetail.order),
+                amount: orderDetail.totalPrice,
+                order: orderDetail.order.toString(),
             }}),
           },
           setAlert
@@ -133,7 +134,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                 infoPago : {referenciaBancaria : dataBankReference.BankReference,
                 banco : dataBankReference.Bank,
                 montoTransferido : dataBankReference.amountTransferred}
-            });                     
+            });                  
         }
     };
 
@@ -144,7 +145,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
     const handleSubmitZelleReference = async zelleData => {
         try {
             if(zelleData){
-
+                setRecordPoints();
                 const responseData = await fetcher(
                 `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions`,
                 {
@@ -156,8 +157,8 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                     body: JSON.stringify({data : {
                         zelleEmail: zelleData.email,
                         amountTransferred: zelleData.amountTransferred,
-                        amount: String(orderDetail.totalPrice),
-                        order: String(orderDetail.order),
+                        amount: orderDetail.totalPrice,
+                        order: orderDetail.order.toString(),
                     }}),
                 },
                 setAlert
@@ -173,7 +174,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                         detalleDeLaOrden : orderDetail,
                         infoPago : {correoZelle : zelleData.email,
                                     montoTransferido: zelleData.amountTransferred}
-                    });                       
+                    });                    
                 }
             }
     } catch (error) {
@@ -181,12 +182,9 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
     }
     };
 
-    const handleChangeZelleReference = (e) => {
-        setDataZelleReference({ ...dataZelleReference, [e.target.name]: e.target.value }); 
-    };
-    
     const handleSubmitCashReference = async (e) => {
         e.preventDefault();
+        setRecordPoints();
         const responseData = await fetcher(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions`,
           {
@@ -197,8 +195,8 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
             },
             body: JSON.stringify({data : {
                 cash: true,
-                amount: String(orderDetail.totalPrice),
-                order: String(orderDetail.order),
+                amount: orderDetail.totalPrice,
+                order: orderDetail.order.toString(),
             }}),
           },
           setAlert
@@ -214,10 +212,102 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                 usuario : user,
                 detalleDeLaOrden : orderDetail,
                 infoPago : {pagoEfectivo : "Si"}
-            });                       
+            });                      
+        }
+    };
+
+    const handleSubmitPayPointReference = async (e) => {
+        e.preventDefault();
+        if(availablePoints < orderDetail.totalPriceInPoints){
+            setAlert({
+                message : "Upss, tus Q'puntos son insuficientes :(",
+                tipo    : 1
+            })
+            return;
+        }
+
+        setRecordPoints();
+
+        const responseData = await fetcher(
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${jwt}`,
+            },
+            body: JSON.stringify({data : {
+                amountInPoints  : orderDetail.totalPriceInPoints,
+                payPoints       : true,
+                amount          : orderDetail.totalPrice,
+                order           : orderDetail.order.toString(),
+            }}),
+          },
+          setAlert
+        );
+
+
+        if(responseData && !(responseData?.error?.status === 400)){
+            setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por su compra',
+                      tipo    : 2
+            });
+            Cookies.remove('orderDetailCk'); 
+            emailSend(setAlert,{
+                usuario : user,
+                detalleDeLaOrden : orderDetail,
+                infoPago : {Qpuntos : "Si"}
+            });                   
         }
     };
    
+    const setRecordPoints = async () => {
+
+        let operationRecordPoints = {}
+        if(availablePoints >= orderDetail.totalPriceInPoints){
+            operationRecordPoints = {
+                availablePoints  : (availablePoints - orderDetail.totalPriceInPoints) + orderDetail.pointsEarned,
+                totalPointsSpent : totalPointsSpent + orderDetail.totalPriceInPoints,
+            }
+        }else if(availablePoints < orderDetail.totalPriceInPoints){
+            operationRecordPoints = {
+                availablePoints  : availablePoints + orderDetail.pointsEarned,
+            }
+        }
+
+        const responseData = await fetcher(
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/record-points/${idRecordPoint}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${jwt}`,
+            },
+            body: JSON.stringify({data : operationRecordPoints}),
+          },
+          setAlert
+        );
+    };
+
+    const getRecordPoints = async () => {
+        const responseData = await fetcher(
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/record-points?filters[username][$eqi]=${user}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${jwt}`,
+            },
+          },
+          setAlert
+        );
+
+        if(responseData){
+            console.log(responseData)
+            setIdRecordPoint(responseData?.data[0]?.id)
+            setAvailablePoints(responseData?.data[0]?.attributes?.availablePoints);
+            setTotalPointsSpent(responseData?.data[0]?.attributes?.totalPointsSpent)
+        }
+    };
 
     return (
         <Layout 
@@ -225,7 +315,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
             title="Checkout"
             shoppingCart={shoppingCart}
         >
-            {alert !== '' ?
+            {Object.keys(alert).length !== 0 ?
                 <Alerta
                     alert={alert}
                     setAlert={setAlert}
@@ -291,11 +381,9 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                                                         <label htmlFor="text" className={`${deshabilitado ? 'opacity-20' : ''} peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}>Nombre de quien recibe</label>
                                                     </div>
                                                     <button type="submit" className={`bg-[#d3850f] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar datos de envío</button>
-                                                </form>
-                                            </div>  : ''
-                                    }
-                                    {
-                                        formDirection ? 
+                                                </form>                                                                            
+                                            </div>                                  
+                                        :formDirection ? 
                                             <div>
                                                 <h2 className='text-2xl text-[#f5884d] font-semibold pb-6'>Metodos de pago disponibles</h2>
                                                 {payMethods?.data?.map(payMethod => 
@@ -311,6 +399,14 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                                                 )}
                                             </div> : ''
                                     }
+                                    <div className=' border-[1px] border-[#cfcfcf] mt-5 p-2 rounded-lg font-medium text-[#6c6c6c]'>
+                                        <p>
+                                            Tus Q'puntos: <span className='font-semibold'>{availablePoints}</span>
+                                        </p>
+                                        <p>
+                                            Q'puntos a ganar: <span className='font-semibold text-green-700'>+{orderDetail.pointsEarned}</span>
+                                        </p>
+                                    </div> 
                                 </div>
                                 <div className='col-span-2 border-solid border-[1px] border=[#cfcfcf] p-5'>
                                     <div className=' bg-gray-50 rounded-md p-5'>
@@ -319,11 +415,12 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                                             Número de pedido <span className='text-xl font-semibold'>{orderDetail.order}</span>
                                         </div>
                                         <p className=' text-sm mb-5'>
-                                            <span className='block text-base font-medium'>Productos:</span>{orderDetail.productsAndQuantity.replace(/,/g, '\n')}
+                                            <span className='block text-base font-medium'>Productos:</span>{orderDetail.productsAndQuantity.replace(/,/g, ', \n')}
                                         </p>
-                                        <div className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between mb-5'>
+                                        <div className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between'>
                                             Total a pagar: <span className='text-xl font-semibold'>$ {orderDetail.totalPrice}</span>
                                         </div>
+                                        <div className='mb-5 text-right'><span className={`text-base font-semibold ${availablePoints >= orderDetail.totalPriceInPoints ? "text-green-700" : "text-red-600"}`}>Q'puntos {orderDetail.totalPriceInPoints}</span></div>
                                         {formDirection ? 
                                             <div>
                                                 <p className=' text-base font-medium mb-5'>Localización de entrega: <span className='text-sm font-normal'>{orderDetail.deliveryAddress}</span></p>
@@ -332,7 +429,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                                                     Confirmación de pago
                                                 </h3>
                                                 <div className="flex items-center mb-4">
-                                                    <input id="country-option-1" onClick={()=>{setBankReference(true);setZelleReference(false);setCashReference(false)}} type="radio" name="countries" value="pago movil" className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"/>
+                                                    <input id="country-option-1" onClick={()=>{setBankReference(true);setZelleReference(false);setCashReference(false);setPayPointReference(false)}} type="radio" name="countries" value="pago movil" className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"/>
                                                     <label htmlFor="country-option-1" className="block ms-2  text-sm font-medium text-gray-900 dark:text-gray-300">
                                                         Pago movíl
                                                     </label>
@@ -376,7 +473,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                                                     </form>
                                                 : ''}
                                                 <div className="flex items-center my-4">
-                                                    <input id="country-option-1" onClick={()=>{setZelleReference(true);setBankReference(false);setCashReference(false)}} type="radio" name="countries" value="zelle" className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"/>
+                                                    <input id="country-option-1" onClick={()=>{setZelleReference(true);setBankReference(false);setCashReference(false);setPayPointReference(false)}} type="radio" name="countries" value="zelle" className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"/>
                                                     <label htmlFor="country-option-1" className="block ms-2  text-sm font-medium text-gray-900 dark:text-gray-300">
                                                         Zelle
                                                     </label>
@@ -411,13 +508,24 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                                                     </form>
                                                 : ''}
                                                 <div className="flex items-center my-4">
-                                                    <input id="country-option-1" onClick={()=>{setCashReference(true);setZelleReference(false);setBankReference(false)}} type="radio" name="countries" value="zelle" className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"/>
+                                                    <input id="country-option-1" onClick={()=>{setCashReference(true);setZelleReference(false);setBankReference(false);setPayPointReference(false)}} type="radio" name="countries" value="zelle" className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"/>
                                                     <label htmlFor="country-option-1" className="block ms-2  text-sm font-medium text-gray-900 dark:text-gray-300">
                                                         Efectivo
                                                     </label>
                                                 </div>
                                                 {cashReference ?
                                                     <form onSubmit={handleSubmitCashReference} className="flex items-center my-4">                                                   
+                                                        <button type="submit" className={`bg-[#d3850f] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar pago</button>
+                                                     </form>  
+                                                : ''} 
+                                                <div className="flex items-center my-4">
+                                                    <input id="country-option-1" onClick={()=>{setPayPointReference(true);setCashReference(false);setZelleReference(false);setBankReference(false)}} type="radio" name="countries" value="zelle" className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"/>
+                                                    <label htmlFor="country-option-1" className="block ms-2  text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                        Q'puntos
+                                                    </label>
+                                                </div>
+                                                {payPointReference ?
+                                                    <form onSubmit={handleSubmitPayPointReference} className="flex items-center my-4">                                                   
                                                         <button type="submit" className={`bg-[#d3850f] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar pago</button>
                                                      </form>  
                                                 : ''}                                           
@@ -438,7 +546,7 @@ export async function getStaticProps(){
     const payMethods = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/paymethods`);
     return{
         props:{
-            payMethods:payMethods
+            payMethods:payMethods,
         }
     }
 }
