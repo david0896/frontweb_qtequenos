@@ -355,12 +355,14 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                     }
                   </tbody>
               </table>
-              {/* {
-                user &&
-                  <Pagination
-                    pagination={listOrdes.meta.pagination}
-                  />
-              } */}
+              {
+                Object.keys(listOrdes.data).length !== 0 ?
+                  user &&
+                    <Pagination
+                      pagination={listOrdes.meta.pagination}
+                    />
+                : <p>Cargando datos...</p>
+              }
           </div>
         </div>
       </div>
