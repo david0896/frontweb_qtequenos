@@ -363,7 +363,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
           </div>
         </div>
       </div>
-      <Modal 
+      {/* <Modal 
         isVisible={showModal}
         onClose={()=>setShowModal(false)}
       >
@@ -406,7 +406,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                 </tr>  
             </tbody>
         </table>
-      </Modal>              
+      </Modal>               */}
     </Layout>
   )
 }
