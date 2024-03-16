@@ -86,7 +86,6 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                 method: 'POST',
                 }
             );
-            console.log(responseData)
             if(responseData){
                 orderDetail = {
                     order               : responseData?.data?.id,

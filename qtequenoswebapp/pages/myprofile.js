@@ -313,7 +313,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
             </div>
           </div>
         </div>
-        {/* <div className=" border-[1px] border-[#cfcfcf] rounded-md p-3">        
+        <div className=" border-[1px] border-[#cfcfcf] rounded-md p-3">        
           <div className="relative overflow-x-auto sm:rounded-lg">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -361,7 +361,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                   />
               }
           </div>
-        </div> */}
+        </div>
       </div>
       {/* <Modal 
         isVisible={showModal}
