@@ -10,7 +10,7 @@ import { fetcher } from '../../lib/api';
 import {getTokenFromLocalCookie} from '../../lib/auth';
 import Cookies from 'js-cookie';
 
-export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuantity, deleteProduct, total, setTotal, totalPoints, setTotalPoints, pointsForDollar, alert, setAlert}) {
+export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuantity, deleteProduct, total, setTotal, totalPoints, setTotalPoints, pointsForDollar, alert, setAlert, listOrderStatuses}) {
     const jwt = getTokenFromLocalCookie();
     const {user, loading} = useFetchUser();
     const [values, setValues] = useState(Array(shoppingCart.length).fill(0));
@@ -18,8 +18,8 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
     let orderDetail = {}  
 
     useEffect(() => {
-        setValue(shoppingCart)    
-      }, []);
+        setValue(shoppingCart);  
+      }, [user]);
     
     useEffect(()=>{
         const totalCalculation = shoppingCart.reduce((total, product)=> total + (product.quantity * product.price), 0);
@@ -78,14 +78,15 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                     Authorization: `Bearer ${jwt}`,
                 },
                 body: JSON.stringify({
-                    data: {
-                        status: 'Pendiente de pago',      
-                        user: user,                    
+                    data: {     
+                        user            : user,                  
+                        order_statuses  : listOrderStatuses[0].id  
                     },
                 }),
                 method: 'POST',
                 }
             );
+            console.log(responseData)
             if(responseData){
                 orderDetail = {
                     order               : responseData?.data?.id,
@@ -120,7 +121,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                 method: 'POST',
                 }
             );
-            if(responseData){                
+            if(Object.keys(responseData).length !== 0){                
                 orderDetail.id = responseData.data.id; //refactorizar y enviar el id por la url a checkout page, no usar cookies
                 Cookies.set('orderDetailCk', JSON.stringify(orderDetail));
                 setShoppingCart([]);
@@ -137,7 +138,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
             title="Carrito de compras"
             shoppingCart={shoppingCart}
         >
-            {alert != '' ?
+            {Object.keys(alert).length !== 0 ?
                 <Alerta
                     alert={alert}
                     setAlert={setAlert}

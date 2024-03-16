@@ -1,13 +1,9 @@
 import { useRouter } from 'next/router';
 import { useState } from "react";
-import Image from "next/image"
 import Link from "next/link"
 import { unsetToken } from '../lib/auth';
 import { useUser } from '../lib/authContext';
 import style from "../styles/styles.module.css";
-
-import NavAuthStrapi from './navAuthStrapi';
-import ShoppingCart from '@/pages/store/shoppingCart';
 
 const logout = () => {
     unsetToken();
@@ -75,14 +71,21 @@ export default function Header({shoppingCart}) {
                                 {isOpen && (
                                   <div className="origin-top-left px-4 py-2 absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                                     <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                                      <Link
-                                          href="#"
-                                          className={`block text-gray-700 font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0`}
-                                          onClick={logout}
-                                          style={{ cursor: 'pointer' }}
-                                          >
-                                          CERRAR SESIÓN
-                                      </Link>
+                                        <Link
+                                            href="/myprofile"
+                                            className={`block text-gray-700 font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0`}
+                                            style={{ cursor: 'pointer' }}
+                                            >
+                                            MI PERFIL
+                                        </Link>
+                                        <Link
+                                            href="#"
+                                            className={`block text-gray-700 font-semibold border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#c21a7f] md:p-0`}
+                                            onClick={logout}
+                                            style={{ cursor: 'pointer' }}
+                                            >
+                                            CERRAR SESIÓN
+                                        </Link>
                                     </div>
                                   </div>
                                 )}

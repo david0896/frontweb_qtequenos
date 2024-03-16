@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
+export default function Checkout({payMethods, alert, setAlert, shoppingCart, listOrderStatuses}) {
     const schema = yup.object().shape({
         email             : yup.string().trim().required('El campo es requerido').email('Ingrese un correo valido como: ejemplo@next.com'),
         amountTransferred : yup.number('El campo admite solo numeros').required('El campo es requerido')
@@ -71,32 +71,6 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
         }
     };
 
-    const updateStatusOrder = async (e) => {
-        e.preventDefault();
-        const responseData = await fetcher(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}/order/${orderDetail.id}`,
-          {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${jwt}`,
-            },
-            body: JSON.stringify({data : {
-                deliveryAddress: data.deliveryAddress,
-                recipientsName: data.recipientsName,
-            }}),
-          },
-          setAlert
-        );
-
-        if(responseData){
-            orderDetail.deliveryAddress = data.deliveryAddress;
-            orderDetail.recipientsName = data.recipientsName;
-            Cookies.set('orderDetailCk', JSON.stringify(orderDetail));
-            setFormDirection(true);
-        }
-    }; // Finalizar el cambio de status a pagado
-
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
@@ -123,10 +97,11 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
           setAlert
         );
 
-        if(responseData && !(responseData?.error?.status === 400)){
+        if(Object.keys(responseData).length !== 0 && !(responseData?.error?.status === 400)){
             setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por tu compra <3',
                       tipo    : 2
             });
+            setUpdateStatusOrder(orderDetail.order, 1);
             Cookies.remove('orderDetailCk');   
             emailSend(setAlert, {
                 usuario : user,
@@ -164,10 +139,11 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                 setAlert
                 );
 
-                if(responseData && !(responseData?.error?.status === 400)){
+                if(Object.keys(responseData).length !== 0 && !(responseData?.error?.status === 400)){
                     setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por tu compra <3',
                             tipo    : 2
                     });
+                    setUpdateStatusOrder(orderDetail.order, 1);
                     Cookies.remove('orderDetailCk'); 
                     emailSend(setAlert, {
                         usuario : user,
@@ -202,11 +178,11 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
           setAlert
         );
 
-        if(responseData && !(responseData?.error?.status === 400)){
-            //console.log(responseData)
+        if(Object.keys(responseData).length !== 0 && !(responseData?.error?.status === 400)){
             setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por su compra',
                       tipo    : 2
             });
+            setUpdateStatusOrder(orderDetail.order, 1);
             Cookies.remove('orderDetailCk'); 
             emailSend(setAlert,{
                 usuario : user,
@@ -247,10 +223,11 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
         );
 
 
-        if(responseData && !(responseData?.error?.status === 400)){
+        if(Object.keys(responseData).length !== 0 && !(responseData?.error?.status === 400)){
             setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por su compra',
                       tipo    : 2
             });
+            setUpdateStatusOrder(orderDetail.order, 2);
             Cookies.remove('orderDetailCk'); 
             emailSend(setAlert,{
                 usuario : user,
@@ -302,12 +279,30 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
         );
 
         if(responseData){
-            console.log(responseData)
             setIdRecordPoint(responseData?.data[0]?.id)
             setAvailablePoints(responseData?.data[0]?.attributes?.availablePoints);
             setTotalPointsSpent(responseData?.data[0]?.attributes?.totalPointsSpent)
         }
     };
+
+    const setUpdateStatusOrder = async (idOrder, type) =>{
+        const responseData = await fetcher(
+            `${process.env.NEXT_PUBLIC_STRAPI_URL}/orders/${idOrder}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwt}`,
+              },
+              body: JSON.stringify({
+                    data : {                      
+                        order_statuses : type === 1 ? listOrderStatuses[1].id : listOrderStatuses[2].id
+                    },
+                }),
+            },
+            setAlert
+          )
+    }
 
     return (
         <Layout 
@@ -328,7 +323,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart}) {
                     Object.keys(orderDetail).length !== 0 ?
                         <div>
                             <p className={`${Object.keys(orderDetail).length !== 0 ? 'hidden' : 'block'} text-center text-lg font-medium text-zinc-500`}>Completa los detalles para retirar tu pedido y confirma tu pago</p>               
-                            <div className='grid grid-cols-1 lg:grid-cols-5 gap-2 lg:gap-6 mt-10 mb-20'> 
+                            <div className='grid grid-cols-1 lg:grid-cols-5 gap-2 lg:gap-2 mt-10 mb-20'> 
                                 <div className='col-span-3 border-solid border-[1px] border=[#cfcfcf] p-5'>
                                     {
                                         !formDirection ? 

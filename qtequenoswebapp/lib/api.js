@@ -8,16 +8,22 @@ export async function fetcher(url, option = {}, setAlert = {}){
         }
         const data = await response.json();
         if(data.data === null){
-            setAlert({
-                message: 'Ocurrio un error en la consulta: ' + data.error.message,
-                tipo: 1
-            });
+            if(Object.keys(setAlert).length !== 0){
+                setAlert({
+                    message: 'Ocurrio un error en la consulta: ' + data.error.message,
+                    tipo: 1
+                });
+            }
+            console.log('Ocurrio un error en la consulta: ' + data.error.message);
         } 
         return data;
     } catch (e) {
-        setAlert({
-            message: 'Ocurrio un error en la consulta: ' + e.message,
-            tipo: 1
-        });
+        if(Object.keys(setAlert).length !== 0){
+            setAlert({
+                message: 'Ocurrio un error en la consulta: ' + e.message,
+                tipo: 1
+            });
+        }
+        console.log('Ocurrio un error en la consulta: ' + e.message);
     }    
 }

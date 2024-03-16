@@ -36,8 +36,8 @@ const Register = ({setAlert}) => {
                     },
                     body: JSON.stringify({
                         username: userData.username,
-                        name: userData.name,
-                        lastname: userData.lastname,
+                        name: String(userData.name).toLowerCase(),
+                        lastname: String(userData.lastname).toLowerCase(),
                         document: userData.document,
                         email: userData.email,
                         phone: userData.phone,
@@ -51,7 +51,7 @@ const Register = ({setAlert}) => {
 
                 if(responseData){
                     if(responseData?.user?.confirmed)
-                        setRecordPoints(responseData?.jwt, responseData?.username);
+                        setRecordPoints(responseData?.jwt, responseData?.user?.username);
 
                     setToken(responseData, setAlert);                    
                 }
@@ -62,7 +62,7 @@ const Register = ({setAlert}) => {
         }
     };
 
-    const setRecordPoints = async (jwt, user) => {
+    const setRecordPoints = async (jwt, userclient) => {
         const responseData = await fetcher(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/record-points`,
           {
@@ -72,7 +72,7 @@ const Register = ({setAlert}) => {
               Authorization: `Bearer ${jwt}`,
             },
             body: JSON.stringify({data : {
-                username: user
+                username: userclient
             }}),
           },
           setAlert

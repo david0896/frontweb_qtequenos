@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import '@/styles/globals.css';
 import { ParallaxProvider } from 'react-scroll-parallax';
+import { fetcher } from '@/lib/api';
+import {getTokenFromLocalCookie} from '../lib/auth';
 import Maintenance from './maintenance';
 
 export default function App({ Component, pageProps }) {
@@ -10,6 +12,8 @@ export default function App({ Component, pageProps }) {
   const [alert, setAlert] = useState({});
   const [total, setTotal] = useState(0);
   const [totalPoints, setTotalPoints] = useState(0);
+  const [listOrderStatuses, setListOrderStatuses] = useState({});
+  const jwt = getTokenFromLocalCookie(); 
 
   //const [quantity, setQuantity] = useState([]);
 
@@ -19,6 +23,7 @@ export default function App({ Component, pageProps }) {
   
   useEffect(() => {
     setReadyPage(true);
+    getOrderStatus();
   }, [])
   
   const addShoppingCart = (product) => {
@@ -58,6 +63,27 @@ export default function App({ Component, pageProps }) {
     window.localStorage.setItem('shoppingCart', JSON.stringify( shoppingCart ));
   }
 
+  const getOrderStatus = async () =>{
+    try {
+        const responseData = await fetcher(
+            `${process.env.NEXT_PUBLIC_STRAPI_URL}/order-statuses?sort=id:asc`,
+            {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${jwt}`,
+                },
+            },
+            setAlert
+        );
+        if(Object.keys(responseData).length !== 0 ){              
+            setListOrderStatuses(responseData.data)
+        }
+    } catch (error) {
+      console.error(error);
+    }
+}
+
   return ( 
     readyPage ?
       <ParallaxProvider>
@@ -74,6 +100,7 @@ export default function App({ Component, pageProps }) {
           setTotal={setTotal}
           totalPoints={totalPoints}
           setTotalPoints={setTotalPoints}
+          listOrderStatuses={listOrderStatuses}
         />    
       </ParallaxProvider>     
     : null
