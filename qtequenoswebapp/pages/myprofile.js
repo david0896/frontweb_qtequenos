@@ -333,24 +333,25 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                       </tr>
                   </thead>
                   <tbody>
-                    {
-                      user && 
-                      listOrdes.data.map((data)=>{return(
-                          <tr key={data.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {data.id}
-                              </th>
-                              <td className="px-6 py-4">
-                                {data.attributes.order_statuses.data.map(data=>data.attributes.name)}
-                              </td>
-                              <td className="px-6 py-4 hidden lg:block">
-                                {mydateFormat(data.attributes.createdAt)}
-                              </td>
-                              <td className="px-6 py-4">
-                                <a href="#" onClick={()=>{getOrderDetail(data.id);setShowModal(true)}} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Ver más</a>
-                              </td>                              
-                          </tr>                          
-                      )})
+                    { 
+                      Object.keys(listOrdes.data).length !== 0 ?
+                        user && 
+                        listOrdes.data.map((data)=>{return(
+                            <tr key={data.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                  {data.id}
+                                </th>
+                                <td className="px-6 py-4">
+                                  {data.attributes.order_statuses.data.map(data=>data.attributes.name)}
+                                </td>
+                                <td className="px-6 py-4 hidden lg:block">
+                                  {mydateFormat(data.attributes.createdAt)}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <a href="#" onClick={()=>{getOrderDetail(data.id);setShowModal(true)}} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Ver más</a>
+                                </td>                              
+                            </tr>                          
+                        )}) : <p>Cargando datos...</p>
                     }
                   </tbody>
               </table>
@@ -363,7 +364,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
           </div>
         </div>
       </div>
-      {/* <Modal 
+      <Modal 
         isVisible={showModal}
         onClose={()=>setShowModal(false)}
       >
@@ -406,7 +407,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                 </tr>  
             </tbody>
         </table>
-      </Modal>               */}
+      </Modal>        
     </Layout>
   )
 }
