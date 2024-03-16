@@ -270,7 +270,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                 <button type="submit" className="hidden text-white bg-[#d3850f] hover:bg-[#943800] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Editar</button>
             </form>
           </div>
-          {/* <div className=" col-span-3 border-[1px] border-[#cfcfcf] p-5 rounded-lg">
+          <div className=" col-span-3 border-[1px] border-[#cfcfcf] p-5 rounded-lg">
             <div>
               {Object.keys(orderDetailCk).length !== 0 ?
                 <div>
@@ -311,7 +311,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                   </div>
               }
             </div>
-          </div> */}
+          </div>
         </div>
         {/* <div className=" border-[1px] border-[#cfcfcf] rounded-md p-3">        
           <div className="relative overflow-x-auto sm:rounded-lg">
