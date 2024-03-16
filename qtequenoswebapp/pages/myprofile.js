@@ -355,12 +355,12 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                     }
                   </tbody>
               </table>
-              {
+              {/* {
                 user &&
                   <Pagination
                     pagination={listOrdes.meta.pagination}
                   />
-              }
+              } */}
           </div>
         </div>
       </div>
