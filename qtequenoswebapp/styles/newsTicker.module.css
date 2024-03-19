@@ -1,0 +1,20 @@
+.ticker {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .news {
+    display: flex;
+    white-space: nowrap;
+    animation: scroll 999s linear infinite;
+  }
+  
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }

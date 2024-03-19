@@ -1,5 +1,7 @@
 import { useState, useEffect} from 'react';
 import Layout from "@/components/layout";
+import MessagePrompt from '@/components/messagePrompt';
+import SuccessfullPayment from '@/components/successfullPayment';
 import Alerta from '@/components/alert';
 import { useFetchUser } from '../../lib/authContext';
 import { fetcher } from '../../lib/api';
@@ -32,6 +34,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, lis
     const [zelleReference, setZelleReference] = useState(false);
     const [cashReference, setCashReference] = useState(false);
     const [payPointReference, setPayPointReference] = useState(false);
+    const [successfulPayment, setSuccessfulPayment] = useState(false);
     const [formDirection, setFormDirection] = useState(false);
     const [deshabilitado, setDeshabilitado] = useState(true);
     const [availablePoints, setAvailablePoints] = useState(0);
@@ -98,9 +101,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, lis
         );
 
         if(Object.keys(responseData).length !== 0 && !(responseData?.error?.status === 400)){
-            setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por tu compra <3',
-                      tipo    : 2
-            });
+            setSuccessfulPayment(true);
             setUpdateStatusOrder(orderDetail.order, 1);
             Cookies.remove('orderDetailCk');   
             emailSend(setAlert, {
@@ -140,9 +141,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, lis
                 );
 
                 if(Object.keys(responseData).length !== 0 && !(responseData?.error?.status === 400)){
-                    setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por tu compra <3',
-                            tipo    : 2
-                    });
+                    setSuccessfulPayment(true);
                     setUpdateStatusOrder(orderDetail.order, 1);
                     Cookies.remove('orderDetailCk'); 
                     emailSend(setAlert, {
@@ -179,9 +178,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, lis
         );
 
         if(Object.keys(responseData).length !== 0 && !(responseData?.error?.status === 400)){
-            setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por su compra',
-                      tipo    : 2
-            });
+            setSuccessfulPayment(true);
             setUpdateStatusOrder(orderDetail.order, 1);
             Cookies.remove('orderDetailCk'); 
             emailSend(setAlert,{
@@ -224,9 +221,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, lis
 
 
         if(Object.keys(responseData).length !== 0 && !(responseData?.error?.status === 400)){
-            setAlert({message : 'Los datos de tu confirmación de pago estan siendo revisados, Gracias por su compra',
-                      tipo    : 2
-            });
+            setSuccessfulPayment(true);
             setUpdateStatusOrder(orderDetail.order, 2);
             Cookies.remove('orderDetailCk'); 
             emailSend(setAlert,{
@@ -319,11 +314,12 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, lis
             }
             <main className="px-5 mt-10 mx-auto lg:w-9/12">                
                 <h1 className="px-4 text-center lg:px-0 text-[#f5884d] block text-5xl lg:text-6xl my-5 uppercase font-extrabold">Checkout</h1>
+                <MessagePrompt/>
                 {
                     Object.keys(orderDetail).length !== 0 ?
                         <div>
                             <p className={`${Object.keys(orderDetail).length !== 0 ? 'hidden' : 'block'} text-center text-lg font-medium text-zinc-500`}>Completa los detalles para retirar tu pedido y confirma tu pago</p>               
-                            <div className='grid grid-cols-1 lg:grid-cols-5 gap-2 lg:gap-2 mt-10 mb-20'> 
+                            <div className='grid grid-cols-1 lg:grid-cols-5 gap-2 lg:gap-2 mt-4 mb-20'> 
                                 <div className='col-span-3 border-solid border-[1px] border=[#cfcfcf] p-5'>
                                     {
                                         !formDirection ? 
@@ -530,7 +526,9 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, lis
                                 </div>
                             </div>
                         </div>
-                    : <p className='mt-10 mb-[20rem] text-center text-lg font-medium'>Upss no tienes ningun pedido por <span className=' font-bold'>Confirmación de pago</span>, agrega productos al carrito.</p>
+                    : successfulPayment ? 
+                        <SuccessfullPayment/> : 
+                        <p className='mt-10 mb-[20rem] text-center text-lg font-medium'>Upss no tienes ningun pedido por <span className=' font-bold'>Confirmación de pago</span>, agrega productos al carrito.</p>
                 }
             </main>
         </Layout>

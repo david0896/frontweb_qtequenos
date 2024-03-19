@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Router from 'next/router';
 import Layout from "@/components/layout";
+import MessagePrompt from '@/components/messagePrompt';
 import Image from "next/image";
 import Alerta from '@/components/alert';
 import { useFetchUser } from '../../lib/authContext';
@@ -146,6 +147,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
             }
             <main className="px-5 mt-10 mx-auto lg:w-9/12">
                 <h1 className="px-4 text-center lg:px-0 text-[#f5884d] block text-5xl lg:text-6xl my-10 uppercase font-extrabold">Carrito</h1>
+                <MessagePrompt/>
                 <div className={styles.contenido}>
                     <div className={styles.carrito}>
                         <h2 className='text-lg font-bold'>Articulos</h2>
