@@ -87,6 +87,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                 method: 'POST',
                 }
             );
+            
             if(responseData){
                 orderDetail = {
                     order               : responseData?.data?.id,

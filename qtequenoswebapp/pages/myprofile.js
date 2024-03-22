@@ -39,7 +39,6 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
       getListOrders(page);
       setOrderActuali(orderDetailCk.order);
       setOrderDetailActuali(orderDetailCk.id);
-      
   }, [user])
 
   useEffect(() => {
@@ -47,7 +46,9 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
   }, [orderDetail])
 
   useEffect(() => {
-    getListOrders(page);
+    if(page !== undefined){
+      getListOrders(page);
+    }
   }, [page])
 
   const handleSubmit = async (e) => {
@@ -92,7 +93,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
 
   const getListOrders = async (page = 1)=>{
     const responseData = await fetcher(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/orders?filters[user][$eqi]=${user}&populate=*&sort=createdAt:desc&pagination[page]=${page}&pagination[pageSize]=25`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/orders?filters[user][$eqi]=${user}&populate=*&sort=createdAt:desc&pagination[page]=${page}&pagination[pageSize]=10`,
         {
           method: 'GET',
           headers: {
@@ -334,8 +335,9 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                   </thead>
                   <tbody>
                     { 
-                      Object.keys(listOrdes.data).length !== 0 ?
-                        user && 
+                      user &&
+                      Object.keys(listOrdes.data).length > 0 ?
+                        
                         listOrdes.data.map((data)=>{return(
                             <tr key={data.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -351,7 +353,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                                   <a href="#" onClick={()=>{getOrderDetail(data.id);setShowModal(true)}} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Ver más</a>
                                 </td>                              
                             </tr>                          
-                        )}) : <p>Cargando datos...</p>
+                        )}) : <tr><th>Cargando datos...</th><th>Cargando datos...</th><th>Cargando datos...</th><th>Cargando datos...</th></tr>
                     }
                   </tbody>
               </table>
