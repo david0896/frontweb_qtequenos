@@ -93,7 +93,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
 
   const getListOrders = async (page = 1)=>{
     const responseData = await fetcher(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/orders?filters[user][$eqi]=${user}&populate=*&sort=createdAt:desc&pagination[page]=${page}&pagination[pageSize]=10`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/orders?filters[user][$eqi]=${user}&sort=createdAt:desc&pagination[page]=${page}&pagination[pageSize]=10`,
         {
           method: 'GET',
           headers: {
@@ -344,7 +344,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                                   {data.id}
                                 </th>
                                 <td className="px-6 py-4">
-                                  {data.attributes.order_statuses.data.map(data=>data.attributes.name)}
+                                  {data.attributes.order_status}
                                 </td>
                                 <td className="px-6 py-4 hidden lg:block">
                                   {mydateFormat(data.attributes.createdAt)}

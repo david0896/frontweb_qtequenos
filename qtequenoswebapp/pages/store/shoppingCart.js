@@ -11,7 +11,7 @@ import { fetcher } from '../../lib/api';
 import {getTokenFromLocalCookie} from '../../lib/auth';
 import Cookies from 'js-cookie';
 
-export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuantity, deleteProduct, total, setTotal, totalPoints, setTotalPoints, pointsForDollar, alert, setAlert, listOrderStatuses}) {
+export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuantity, deleteProduct, total, setTotal, totalPoints, setTotalPoints, pointsForDollar, alert, setAlert}) {
     const jwt = getTokenFromLocalCookie();
     const {user, loading} = useFetchUser();
     const [values, setValues] = useState(Array(shoppingCart.length).fill(0));
@@ -81,7 +81,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                 body: JSON.stringify({
                     data: {     
                         user            : user,                  
-                        order_statuses  : listOrderStatuses[0].id  
+                        order_status  : "Pendiente por pago",
                     },
                 }),
                 method: 'POST',
@@ -96,7 +96,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                     deliveryAddress     : 'Retiro en tienda',
                     recipientsName      : '',
                     totalPriceInPoints  : totalPoints,
-                    pointsEarned        : total * pointsForDollar.data.attributes.pointsForDollar,
+                    pointsEarned        : total * pointsForDollar.data.attributes.parameterA,
                 }                
                 createNewOrderDetail()
             }
@@ -243,7 +243,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                             </p>
                         }
                         {shoppingCart.length > 0 ?
-                            <p className=' border-[1px] border-[#cfcfcf] mt-5 p-2 rounded-lg font-medium text-[#6c6c6c]'>Q&apos;puntos a ganar: <span className='font-semibold text-green-700'>+{total * pointsForDollar.data.attributes.pointsForDollar}</span></p>
+                            <p className=' border-[1px] border-[#cfcfcf] mt-5 p-2 rounded-lg font-medium text-[#6c6c6c]'>Q&apos;puntos a ganar: <span className='font-semibold text-green-700'>+{total * pointsForDollar.data.attributes.parameterA}</span></p>
                         : ""
                         }
                     </aside>
