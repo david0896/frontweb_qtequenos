@@ -370,8 +370,8 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
         onClose={()=>setShowModal(false)}
       >
         <h1 className="text-lg font-semibold mb-3">Detalles del pedido nº {orderDetail.data.order}</h1>
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-[#d3850f]/10">
+        <table className="w-full text-xs lg:text-sm text-left rtl:text-right text-gray-500">
+            <thead className="text-xs text-gray-700 lg:uppercase bg-[#d3850f]/10">
                 <tr className="border-2 border-slate-700">
                     <th scope="col" className="px-6 py-3 border-r-2 border-slate-700 w-6/12">
                       Productos
@@ -385,15 +385,15 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
                 </tr>
             </thead>
             <tbody>
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                    {String(orderDetail.data.productsAndQuantity).split(',').map((product, index)=>{return (<p key={index} className=''>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}      
+                <tr className="bg-white border-b hover:bg-gray-50 ">
+                    <th scope="row" className="px-2 lg:px-6 py-4 font-normal lg:font-medium text-gray-900 text-[0.45rem] lg:text-base">
+                    {String(orderDetail.data.productsAndQuantity).split(',').map((product, index)=>{return (<p key={index} className='mb-2'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}      
                     {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" || orderDetail.data.recipientsName !== undefined ? <p className="ml-1 mb-2">Delivery: <span>$ {priceDelivery}</span></p> : '' : ''}
                     </th>
-                    <td className="px-6 py-4">
+                    <td className="px-2 lg:px-6 py-4 text-center">
                       ${orderDetail.data.totalPrice}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-2 lg:px-6 py-4">
                       {
                         mydateFormat(orderDetail.data.createdAt)
                       }
