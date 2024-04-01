@@ -296,7 +296,7 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
                           Q&apos;puntos a ganar:
                           <span className=" font-semibold"> {orderDetailCk.pointsEarned}</span>
                         </p>
-                        <p>Total a pagar: 
+                        <p className="text-right lg:text-left">Total a pagar: 
                           <span className=" font-semibold"> ${orderDetailCk.totalPrice}</span>
                           <span className=" font-semibold block text-right text-sm">Q&apos;puntos {orderDetailCk.totalPriceInPoints}</span>
                         </p>
@@ -336,8 +336,8 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
                       Object.keys(listOrdes.data).length > 0 ?
                         
                         listOrdes.data.map((data)=>{return(
-                            <tr key={data.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <tr key={data.id} className="bg-white border-b hover:bg-gray-50">
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                                   {data.id}
                                 </th>
                                 <td className="px-6 py-4">
@@ -347,7 +347,7 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
                                   {mydateFormat(data.attributes.createdAt)}
                                 </td>
                                 <td className="px-6 py-4">
-                                  <a href="#" onClick={()=>{getOrderDetail(data.id);setShowModal(true)}} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Ver más</a>
+                                  <a href="#" onClick={()=>{getOrderDetail(data.id);setShowModal(true)}} className="font-medium text-blue-600  hover:underline">Ver más</a>
                                 </td>                              
                             </tr>                          
                         )}) : <tr><th>Cargando datos...</th><th>Cargando datos...</th><th>Cargando datos...</th><th>Cargando datos...</th></tr>
@@ -386,7 +386,7 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
             </thead>
             <tbody>
                 <tr className="bg-white border-b hover:bg-gray-50 ">
-                    <th scope="row" className="px-2 lg:px-6 py-4 font-normal lg:font-medium text-gray-900 text-[0.45rem] lg:text-base">
+                    <th scope="row" className="px-2 lg:px-6 py-4 font-normal lg:font-medium text-gray-900 text-xs lg:text-base">
                     {String(orderDetail.data.productsAndQuantity).split(',').map((product, index)=>{return (<p key={index} className='mb-2'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}      
                     {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" || orderDetail.data.recipientsName !== undefined ? <p className="ml-1 mb-2">Delivery: <span>$ {priceDelivery}</span></p> : '' : ''}
                     </th>
