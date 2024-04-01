@@ -11,7 +11,7 @@ import Modal from "@/components/modal";
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 
-const Myprofile = ({shoppingCart, alert, setAlert}) => {
+const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
     const orderDetailCk = Cookies.get('orderDetailCk') ? JSON.parse(Cookies.get('orderDetailCk')) : {};
     const router = useRouter();
     const { page } = router.query;
@@ -39,6 +39,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
       getListOrders(page);
       setOrderActuali(orderDetailCk.order);
       setOrderDetailActuali(orderDetailCk.id);
+      console.log(priceDelivery)
   }, [user])
 
   useEffect(() => {
@@ -282,14 +283,8 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                   </h2>
                   <div className="flex flex-col h-[15rem]">
                     <div className="mt-6 max-h-24 overflow-hidden overflow-y-scroll scr">
-                      {/* {String(orderDetailCk.productsAndQuantity).split(',').map((producto, index)=>{
-                            return (
-                              <span key={index} className="block pb-1">
-                                {producto}
-                              </span>
-                            )
-                          })} */}
                       {orderDetailCk.productsAndQuantity.split(',').map((product, index)=>{return (<p key={index} className=' mb-2 border-b-[1px] border-solid border-gray-300'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}
+                      {orderDetail.data.totalPrice < 25 ? orderDetailCk.recipientsName !== "" || orderDetailCk.recipientsName !== undefined ? <p className=" flex justify-between">Delivery: <span>$ {priceDelivery}</span></p> : '' : ''}
                     </div>
                     <div className="mt-auto">
                       <div className="flex justify-between w-full my-2 ">
@@ -392,7 +387,8 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
             <tbody>
                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                    {String(orderDetail.data.productsAndQuantity).split(',').map((product, index)=>{return (<p key={index} className=' mb-2'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}
+                    {String(orderDetail.data.productsAndQuantity).split(',').map((product, index)=>{return (<p key={index} className=''>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}      
+                    {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" || orderDetail.data.recipientsName !== undefined ? <p className="ml-1 mb-2">Delivery: <span>$ {priceDelivery}</span></p> : '' : ''}
                     </th>
                     <td className="px-6 py-4">
                       ${orderDetail.data.totalPrice}
@@ -411,3 +407,13 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
 }
 
 export default Myprofile
+
+
+export async function getStaticProps(){
+  const priceDelivery = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/config-parameters/2`);
+  return{
+      props:{
+          priceDelivery:priceDelivery.data.attributes.parameterA,
+      }
+  }
+}

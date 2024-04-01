@@ -38,6 +38,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
     const [formDirection, setFormDirection] = useState(false);
     const [sinDelivery, setSinDelivery] = useState(true);
     const [availablePoints, setAvailablePoints] = useState(0);
+    const [totalPriceDelivery, setTotalPriceDelivery] = useState(0);
     const [totalPointsSpent, setTotalPointsSpent] = useState(0);
     const [idRecordPoint,setIdRecordPoint] = useState(0);
     const {user, loading} = useFetchUser();
@@ -48,8 +49,21 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
         getRecordPoints();
         if(orderDetail.recipientsName !== "" )
             setFormDirection(true);
-
+        
+        setTotalPriceDelivery(orderDetail.totalPrice);
     }, [user])
+
+    useEffect(() => {
+
+        if(!sinDelivery){
+            setTotalPriceDelivery(orderDetail.totalPrice < 25 ? priceDelivery.data.attributes.parameterA + orderDetail.totalPrice : orderDetail.totalPrice);
+            return
+        }
+
+        setTotalPriceDelivery(orderDetail.totalPrice);
+
+    }, [sinDelivery])
+    
 
     const handleSubmitOrderDetail = async (e) => {
         e.preventDefault();
@@ -62,7 +76,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
               Authorization: `Bearer ${jwt}`,
             },
             body: JSON.stringify({data : {
-                totalPrice: !sinDelivery ? orderDetail.totalPrice >= 25 ? orderDetail.totalPrice : orderDetail.totalPrice + priceDelivery.data.attributes.parameterA : orderDetail.totalPrice,
+                totalPrice: totalPriceDelivery,
                 deliveryAddress: data.deliveryAddress,
                 recipientsName: data.recipientsName,
             }}),
@@ -76,7 +90,6 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
             orderDetail.recipientsName = data.recipientsName;
             Cookies.set('orderDetailCk', JSON.stringify(orderDetail));
             setFormDirection(true);
-            setSinDelivery(true);
         }
     };
 
@@ -353,7 +366,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                                         </div>
                                                     </fieldset>
                                                     <div className='p-5 mb-5 rounded-lg border-solid border-[1px] border=[#cfcfcf]'>
-                                                        <p className={`${sinDelivery ? 'opacity-20' : ''} pb-5`}>{priceDelivery.data.attributes.name}: <span className=' font-medium'>$ {priceDelivery.data.attributes.parameterA}</span></p>                                                                                 
+                                                        <p className={`${sinDelivery ? 'opacity-20' : ''} pb-5`}>{priceDelivery.data.attributes.name}: {orderDetail.totalPrice >= 25 ? 'Gratis' : <span className=' font-medium'>$ {priceDelivery.data.attributes.parameterA}</span>}</p>                                                                                 
                                                         <div className="relative z-0 w-full mb-5 group">
                                                             <input  type="text"
                                                                     name="deliveryAddress"
@@ -416,16 +429,16 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                         <div className='text-sm mb-5'>
                                             <span className='block text-base font-medium'>Productos:</span>{orderDetail.productsAndQuantity.split(',').map((product, index)=>{return (<p key={index} className=' mb-2 border-b-[1px] border-solid border-gray-300'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}
                                         </div>
-                                        {!sinDelivery && 
+                                        {!sinDelivery && orderDetail.totalPrice < 25 &&
                                             <p className='text-sm mb-5 text-right'>
                                                 <span className='block text-base font-medium text-left'>Delivery:</span>
-                                                costo por envio: <span className=' font-medium'>$ {orderDetail.totalPrice >= 25 ? 0 : priceDelivery.data.attributes.parameterA}</span>
+                                                costo por envio: <span className=' font-medium'>$ {priceDelivery.data.attributes.parameterA}</span>
                                             </p>
                                         }
                                         <div className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between'>
-                                            Total a pagar: <span className='text-xl font-semibold'>$ {!sinDelivery ? orderDetail.totalPrice >= 25 ? orderDetail.totalPrice : priceDelivery.data.attributes.parameterA + orderDetail.totalPrice : orderDetail.totalPrice}</span>
+                                            Total a pagar: <span className='text-xl font-semibold'>$ {totalPriceDelivery}</span>
                                         </div>
-                                        <div className='mb-5 text-right'><span className={`text-base font-semibold ${availablePoints >= orderDetail.totalPriceInPoints ? "text-green-700" : "text-red-600"}`}>Q&apos;puntos {orderDetail.totalPriceInPoints}</span></div>
+                                        <p className='mb-5 flex justify-between'>Total precio Q&apos;puntos <span className={`text-base font-semibold ${availablePoints >= orderDetail.totalPriceInPoints ? "text-green-700" : "text-red-600"}`}>{orderDetail.totalPriceInPoints}</span></p>
                                         {formDirection ? 
                                             <div>
                                                 <h3 className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between mb-5'>
