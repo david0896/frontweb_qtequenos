@@ -8,7 +8,7 @@ const SuccessfullPayment = () => {
         </div>
         <p className=" text-2xl text-gray-800 font-bold mb-5">Tú pedido fue realizado con exito</p>
         <p className="text-xl text-gray-800 mb-5">Estamos procesando tu pago, en breve momentos seras contactad@</p>
-        <p className=" text-lg text-gray-700 font-medium">Desde <Link href="/myprofile" className="text-[#c21a7f]">aqui</Link> puedes ver el estutus de tu pedido</p>
+        <p className=" text-lg text-gray-700 font-medium">Desde <Link href="/myprofile" className="text-[#c21a7f]">aquí</Link> puedes ver el estutus de tu pedido</p>
     </div>
   )
 }

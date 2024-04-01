@@ -36,7 +36,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
     const [payPointReference, setPayPointReference] = useState(false);
     const [successfulPayment, setSuccessfulPayment] = useState(false);
     const [formDirection, setFormDirection] = useState(false);
-    const [deshabilitado, setDeshabilitado] = useState(true);
+    const [sinDelivery, setSinDelivery] = useState(true);
     const [availablePoints, setAvailablePoints] = useState(0);
     const [totalPointsSpent, setTotalPointsSpent] = useState(0);
     const [idRecordPoint,setIdRecordPoint] = useState(0);
@@ -62,6 +62,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
               Authorization: `Bearer ${jwt}`,
             },
             body: JSON.stringify({data : {
+                totalPrice: !sinDelivery ? orderDetail.totalPrice >= 25 ? orderDetail.totalPrice : orderDetail.totalPrice + priceDelivery.data.attributes.parameterA : orderDetail.totalPrice,
                 deliveryAddress: data.deliveryAddress,
                 recipientsName: data.recipientsName,
             }}),
@@ -70,11 +71,12 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
         );
 
         if(responseData){
-            orderDetail.totalPrice = !deshabilitado ? orderDetail.totalPrice + priceDelivery.data.attributes.parameterA : orderDetail.totalPrice;
+            orderDetail.totalPrice = !sinDelivery ? orderDetail.totalPrice >= 25 ? orderDetail.totalPrice : orderDetail.totalPrice + priceDelivery.data.attributes.parameterA : orderDetail.totalPrice;
             orderDetail.deliveryAddress = data.deliveryAddress;
             orderDetail.recipientsName = data.recipientsName;
             Cookies.set('orderDetailCk', JSON.stringify(orderDetail));
             setFormDirection(true);
+            setSinDelivery(true);
         }
     };
 
@@ -332,7 +334,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                                 <form onSubmit={handleSubmitOrderDetail} className="mt-5">
                                                     <fieldset>
                                                         <div className="flex items-center mb-4">
-                                                        <input id="country-option-1" onClick={()=>{setDeshabilitado(true);
+                                                        <input id="country-option-1" onClick={()=>{setSinDelivery(true);
                                                             setData({
                                                                 deliveryAddress: 'Retiro en tienda',
                                                                 recipientsName: '',
@@ -344,37 +346,37 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                                         </div>
 
                                                         <div className="flex items-center mb-4">
-                                                        <input id="country-option-2" onClick={()=>setDeshabilitado(false)} type="radio" name="countries" value="Germany" className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300" />
+                                                        <input id="country-option-2" onClick={()=>setSinDelivery(false)} type="radio" name="countries" value="Germany" className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300" />
                                                         <label htmlFor="country-option-2" className="block ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                             Dirección personalizada
                                                         </label>
                                                         </div>
                                                     </fieldset>
                                                     <div className='p-5 mb-5 rounded-lg border-solid border-[1px] border=[#cfcfcf]'>
-                                                        <p className={`${deshabilitado ? 'opacity-20' : ''} pb-5`}>{priceDelivery.data.attributes.name}: <span className=' font-medium'>${priceDelivery.data.attributes.parameterA}</span></p>                                                                                 
+                                                        <p className={`${sinDelivery ? 'opacity-20' : ''} pb-5`}>{priceDelivery.data.attributes.name}: <span className=' font-medium'>${priceDelivery.data.attributes.parameterA}</span></p>                                                                                 
                                                         <div className="relative z-0 w-full mb-5 group">
                                                             <input  type="text"
                                                                     name="deliveryAddress"
                                                                     onChange={handleChange} 
                                                                     id="deliveryAddress"
-                                                                    className={`${deshabilitado ? 'opacity-20' : ''} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer`} 
+                                                                    className={`${sinDelivery ? 'opacity-20' : ''} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer`} 
                                                                     placeholder="" 
-                                                                    disabled={deshabilitado}
+                                                                    disabled={sinDelivery}
                                                                     required
                                                             />
-                                                            <label htmlFor="text" className={`${deshabilitado ? 'opacity-20' : ''} peer-focus:font-medium absolute text-sm text-gray-500  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}>Dirección</label>
+                                                            <label htmlFor="text" className={`${sinDelivery ? 'opacity-20' : ''} peer-focus:font-medium absolute text-sm text-gray-500  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}>Dirección</label>
                                                         </div>
                                                         <div className="relative z-0 w-full mb-5 group">
                                                             <input  type="text"
                                                                     name="recipientsName"
                                                                     onChange={handleChange} 
                                                                     id="recipientsName" 
-                                                                    className={`${deshabilitado ? 'opacity-20' : ''} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer`} 
+                                                                    className={`${sinDelivery ? 'opacity-20' : ''} block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#d3850f] peer`} 
                                                                     placeholder="" 
-                                                                    disabled={deshabilitado} 
+                                                                    disabled={sinDelivery} 
                                                                     required
                                                             />
-                                                            <label htmlFor="text" className={`${deshabilitado ? 'opacity-20' : ''} peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}>Nombre de quien recibe</label>
+                                                            <label htmlFor="text" className={`${sinDelivery ? 'opacity-20' : ''} peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}>Nombre de quien recibe</label>
                                                         </div>
                                                     </div>
                                                     <button type="submit" className={`bg-[#d3850f] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center`}>Confirmar datos de envío</button>
@@ -408,20 +410,26 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                 <div className='col-span-2 border-solid border-[1px] border=[#cfcfcf] p-5'>
                                     <div className=' bg-gray-50 rounded-md p-5'>
                                         <h3 className='border-[1px] p-3 border-solid border-[#8e8e8e] text-2xl font-semibold mb-10'>Resumen del pedido</h3>
-                                        <div className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between mb-5'>
-                                            Número de pedido <span className='text-xl font-semibold'>{orderDetail.order}</span>
-                                        </div>
-                                        <p className=' text-sm mb-5'>
+                                        <h4 className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between mb-5'>
+                                            Número del pedido <span className='text-xl font-semibold'>{orderDetail.order}</span>
+                                        </h4>
+                                        <p className='text-sm mb-5'>
                                             <span className='block text-base font-medium'>Productos:</span>{orderDetail.productsAndQuantity.replace(/,/g, ', \n')}
                                         </p>
+                                        {!sinDelivery && 
+                                            <p className='text-sm mb-5'>
+                                                <span className='block text-base font-medium'>Delivery:</span>
+                                                costo por envio: ${orderDetail.totalPrice >= 25 ? 0 : priceDelivery.data.attributes.parameterA} 
+                                            </p>
+                                        }
                                         <div className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between'>
-                                            Total a pagar: <span className='text-xl font-semibold'>$ {orderDetail.totalPrice}</span>
+                                            Total a pagar: <span className='text-xl font-semibold'>$ {!sinDelivery ? orderDetail.totalPrice >= 25 ? orderDetail.totalPrice : priceDelivery.data.attributes.parameterA + orderDetail.totalPrice : orderDetail.totalPrice}</span>
                                         </div>
                                         <div className='mb-5 text-right'><span className={`text-base font-semibold ${availablePoints >= orderDetail.totalPriceInPoints ? "text-green-700" : "text-red-600"}`}>Q&apos;puntos {orderDetail.totalPriceInPoints}</span></div>
                                         {formDirection ? 
                                             <div>
                                                 <h3 className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between mb-5'>
-                                                    Retiro
+                                                    Retiro del pedido
                                                 </h3>
                                                 <p className=' text-base font-medium mb-5'>Localización de entrega: <span className='text-sm font-normal'>{orderDetail.deliveryAddress}</span></p>
                                                 <p className={`${orderDetail.recipientsName ? 'block' : ' hidden'} text-base font-medium mb-5`}>Recibe: <span className='text-sm font-normal'>{orderDetail.recipientsName}</span></p>
