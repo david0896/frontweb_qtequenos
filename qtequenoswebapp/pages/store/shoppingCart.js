@@ -91,7 +91,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
             if(responseData){
                 orderDetail = {
                     order               : responseData?.data?.id,
-                    productsAndQuantity : shoppingCart.map((product) => {return `${product.name} x ${product.quantity}`} ).join(','),
+                    productsAndQuantity : shoppingCart.map((product) => {return `${product.name}:${product.price}:${product.quantity}:${product.price * product.quantity}`} ).join(','),
                     totalPrice          : total,
                     deliveryAddress     : 'Retiro en tienda',
                     recipientsName      : '',

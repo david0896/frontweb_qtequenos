@@ -113,8 +113,9 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
   }
 
   const getOrderDetail = async (idOrder)=>{
+
     const responseData = await fetcher(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/order-details/${idOrder}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/order-details?filters[order][$containsi]=${idOrder}`,
         {
           method: 'GET',
           headers: {
@@ -127,8 +128,8 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
 
       if(responseData){
           setOrderDetail({
-              data: responseData.data.attributes,
-              id: responseData.data.id
+              data: responseData.data[0].attributes,
+              id: responseData.data[0].id
             }
           )
       }
@@ -280,14 +281,15 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
                     <span className="text-[#d3850f] font-medium text-lg">Pedido #{orderDetailCk.order}</span>
                   </h2>
                   <div className="flex flex-col h-[15rem]">
-                    <div className="mt-6">
-                      {String(orderDetailCk.productsAndQuantity).split(',').map((producto, index)=>{
+                    <div className="mt-6 max-h-24 overflow-hidden overflow-y-scroll scr">
+                      {/* {String(orderDetailCk.productsAndQuantity).split(',').map((producto, index)=>{
                             return (
                               <span key={index} className="block pb-1">
                                 {producto}
                               </span>
                             )
-                          })}
+                          })} */}
+                      {orderDetailCk.productsAndQuantity.split(',').map((product, index)=>{return (<p key={index} className=' mb-2 border-b-[1px] border-solid border-gray-300'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}
                     </div>
                     <div className="mt-auto">
                       <div className="flex justify-between w-full my-2 ">
@@ -390,15 +392,7 @@ const Myprofile = ({shoppingCart, alert, setAlert}) => {
             <tbody>
                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                      {
-                        separatedProductsAndQuantity.map((producto, index)=>{
-                          return (
-                            <span key={index} className="block pb-1">
-                              {producto}
-                            </span>
-                          )
-                        })
-                      }
+                    {String(orderDetail.data.productsAndQuantity).split(',').map((product, index)=>{return (<p key={index} className=' mb-2'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}
                     </th>
                     <td className="px-6 py-4">
                       ${orderDetail.data.totalPrice}

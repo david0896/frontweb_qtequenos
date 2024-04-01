@@ -353,7 +353,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                                         </div>
                                                     </fieldset>
                                                     <div className='p-5 mb-5 rounded-lg border-solid border-[1px] border=[#cfcfcf]'>
-                                                        <p className={`${sinDelivery ? 'opacity-20' : ''} pb-5`}>{priceDelivery.data.attributes.name}: <span className=' font-medium'>${priceDelivery.data.attributes.parameterA}</span></p>                                                                                 
+                                                        <p className={`${sinDelivery ? 'opacity-20' : ''} pb-5`}>{priceDelivery.data.attributes.name}: <span className=' font-medium'>$ {priceDelivery.data.attributes.parameterA}</span></p>                                                                                 
                                                         <div className="relative z-0 w-full mb-5 group">
                                                             <input  type="text"
                                                                     name="deliveryAddress"
@@ -413,13 +413,13 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                         <h4 className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between mb-5'>
                                             Número del pedido <span className='text-xl font-semibold'>{orderDetail.order}</span>
                                         </h4>
-                                        <p className='text-sm mb-5'>
-                                            <span className='block text-base font-medium'>Productos:</span>{orderDetail.productsAndQuantity.replace(/,/g, ', \n')}
-                                        </p>
+                                        <div className='text-sm mb-5'>
+                                            <span className='block text-base font-medium'>Productos:</span>{orderDetail.productsAndQuantity.split(',').map((product, index)=>{return (<p key={index} className=' mb-2 border-b-[1px] border-solid border-gray-300'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}
+                                        </div>
                                         {!sinDelivery && 
-                                            <p className='text-sm mb-5'>
-                                                <span className='block text-base font-medium'>Delivery:</span>
-                                                costo por envio: ${orderDetail.totalPrice >= 25 ? 0 : priceDelivery.data.attributes.parameterA} 
+                                            <p className='text-sm mb-5 text-right'>
+                                                <span className='block text-base font-medium text-left'>Delivery:</span>
+                                                costo por envio: <span className=' font-medium'>$ {orderDetail.totalPrice >= 25 ? 0 : priceDelivery.data.attributes.parameterA}</span>
                                             </p>
                                         }
                                         <div className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between'>
