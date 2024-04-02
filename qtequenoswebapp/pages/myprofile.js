@@ -39,7 +39,6 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
       getListOrders(page);
       setOrderActuali(orderDetailCk.order);
       setOrderDetailActuali(orderDetailCk.id);
-      console.log(priceDelivery)
   }, [user])
 
   useEffect(() => {
@@ -283,8 +282,9 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
                   </h2>
                   <div className="flex flex-col h-[15rem]">
                     <div className="mt-6 max-h-24 overflow-hidden overflow-y-scroll scr">
-                      {orderDetailCk.productsAndQuantity.split(',').map((product, index)=>{return (<p key={index} className=' mb-2 border-b-[1px] border-solid border-gray-300'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}
-                      {orderDetail.data.totalPrice < 25 ? orderDetailCk.recipientsName !== "" || orderDetailCk.recipientsName !== undefined ? <p className=" flex justify-between">Delivery: <span>$ {priceDelivery}</span></p> : '' : ''}
+                      {orderDetailCk.productsAndQuantity.split(',').map((product, index)=>{return (<p key={index} className=' mb-2 border-b-[1px] border-solid border-gray-300'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'Precio: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}
+                      {<p className=" text-right font-normal mt-2"> Subtotal: <span className="font-semibold">$ {orderDetailCk.totalPrice < 25 ? orderDetailCk.recipientsName !== "" ? (orderDetailCk.totalPrice - priceDelivery) : orderDetailCk.totalPrice : orderDetailCk.totalPrice}</span></p>}
+                      {orderDetailCk.totalPrice < 25 ? orderDetailCk.recipientsName !== "" ? <p className=" flex justify-between mt-2">Delivery: <span>$ {priceDelivery}</span></p> : '' : ''}
                     </div>
                     <div className="mt-auto">
                       <div className="flex justify-between w-full my-2 ">
@@ -370,37 +370,20 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
         onClose={()=>setShowModal(false)}
       >
         <h1 className="text-lg font-semibold mb-3">Detalles del pedido nº {orderDetail.data.order}</h1>
-        <table className="w-full text-xs lg:text-sm text-left rtl:text-right text-gray-500">
-            <thead className="text-xs text-gray-700 lg:uppercase bg-[#d3850f]/10">
-                <tr className="border-2 border-slate-700">
-                    <th scope="col" className="px-6 py-3 border-r-2 border-slate-700 w-6/12">
-                      Productos
-                    </th>
-                    <th scope="col" className="px-6 py-3 border-r-2 border-slate-700 w-3/12">
-                      Precio Total
-                    </th>
-                    <th scope="col" className="px-6 py-3 w-3/12">
-                      Fecha
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr className="bg-white border-b hover:bg-gray-50 ">
-                    <th scope="row" className="px-2 lg:px-6 py-4 font-normal lg:font-medium text-gray-900 text-xs lg:text-base">
-                    {String(orderDetail.data.productsAndQuantity).split(',').map((product, index)=>{return (<p key={index} className='mb-2'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'SubTotal: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}      
-                    {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" || orderDetail.data.recipientsName !== undefined ? <p className="ml-1 mb-2">Delivery: <span>$ {priceDelivery}</span></p> : '' : ''}
-                    </th>
-                    <td className="px-2 lg:px-6 py-4 text-center">
-                      ${orderDetail.data.totalPrice}
-                    </td>
-                    <td className="px-2 lg:px-6 py-4">
-                      {
-                        mydateFormat(orderDetail.data.createdAt)
-                      }
-                    </td>                            
-                </tr>  
-            </tbody>
-        </table>
+        <div className="flex flex-col h-[90%] space-y-5">
+          <div className="mt-6 overflow-hidden overflow-y-scroll p-3">
+            {String(orderDetail.data.productsAndQuantity).split(',').map((product, index)=>{return (<p key={index} className='mb-2'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'Precio: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}      
+            {<p className=" text-right font-normal mt-2"> Subtotal: <span className="font-semibold">$ {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" ? (orderDetail.data.totalPrice - priceDelivery) : orderDetail.data.totalPrice : orderDetail.data.totalPrice}</span></p>}
+            {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" ? <p className=" flex justify-between mt-2">Delivery: <span>$ {priceDelivery}</span></p> : '' : ''}
+          </div>
+          <div className="mt-auto">
+            <div className="border-[1px] border-[#cfcfcf] rounded-md p-3 flex justify-end">
+              <p className="text-right lg:text-left">Total: 
+                <span className=" font-semibold"> ${orderDetail.data.totalPrice}</span>
+              </p>
+            </div>
+          </div>
+        </div>
       </Modal>        
     </Layout>
   )
