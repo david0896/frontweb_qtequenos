@@ -430,11 +430,12 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                             <span className='block text-base font-medium'>Productos:</span>{orderDetail.productsAndQuantity.split(',').map((product, index)=>{return (<p key={index} className=' mb-2 border-b-[1px] border-solid border-gray-300'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'Precio: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}
                                             {<p className=" text-right font-normal mt-2"> Subtotal: <span className="font-semibold">$ {orderDetail.totalPrice < 25 ? orderDetail.recipientsName !== "" ? (orderDetail.totalPrice - priceDelivery.data.attributes.parameterA) : orderDetail.totalPrice : orderDetail.totalPrice}</span></p>}
                                         </div>
-                                        {!sinDelivery || orderDetail.recipientsName !== "" && orderDetail.totalPrice < 25 &&
+                                        {!sinDelivery || orderDetail.recipientsName !== "" ? orderDetail.totalPrice < 25 ?
                                             <p className='text-sm mb-5 text-right'>
                                                 <span className='block text-base font-medium text-left'>Delivery:</span>
                                                 costo por envio: <span className=' font-medium'>$ {priceDelivery.data.attributes.parameterA}</span>
                                             </p>
+                                            : '' : ''
                                         }
                                         <div className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between'>
                                             Total a pagar: <span className='text-xl font-semibold'>$ {totalPriceDelivery}</span>
