@@ -14,12 +14,12 @@ const Register = ({setAlert}) => {
     const router = useRouter();
     const schema = yup.object().shape({
         username: yup.string().trim().required('El campo es requerido'),
-        name: yup.string().trim().required('El campo es requerido').matches(/^[A-Za-z]+$/, "Solo se permiten letras"),
-        lastname: yup.string().trim().required('El campo es requerido').matches(/^[A-Za-z]+$/, "Solo se permiten letras"),
-        document: yup.string().trim().required('El campo es requerido').matches(/^[jJvVeEgG]\d{8}$/, "Debe comenzar con jJ, vV, eE, gG seguido de 8 números"),
-        email: yup.string().trim().required('El campo es requerido').email('Ingrese un correo valido como: ejemplo@next.com'),
-        phone: yup.string().trim().required('El campo es requerido').matches(/^\d+$/, "Solo se permiten números").min(11, 'Debe ingresar minimo 11 caracteres'),
-        password: yup.string().trim().required('El campo es requerido').min(8, 'La contraseña de ser de minimo 8 caracteres')
+        name: yup.string().required('El campo es requerido').matches(/^[A-Za-z\s]+$/, "Solo se permiten letras"),
+        lastname: yup.string().required('El campo es requerido').matches(/^[A-Za-z\s]+$/, "Solo se permiten letras"),
+        //document: yup.string().trim().required('El campo es requerido').matches(/^[jJvVeEgG]\d{8}$/, "Debe comenzar con jJ, vV, eE, gG seguido de 8 números"),
+        email: yup.string().trim().required('El campo es requerido').email('Ingrese un correo valido como: ejemplo@gmail.com'),
+        phone: yup.string().trim().required('El campo es requerido').matches(/^\d+$/, "Solo se permiten números").min(11, 'Debe ingresar 11 digitos'),
+        password: yup.string().trim().required('El campo es requerido').min(8, 'La contraseña debe ser minimo 8 caracteres')
       });
     
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -135,7 +135,7 @@ const Register = ({setAlert}) => {
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder=""  
                             />
-                            <label htmlFor="username" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Usuario</label>
+                            <label htmlFor="username" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Usuario</label>
                             {errors.username?.message && <span className='text-[#721c24]'>{errors.username?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
@@ -146,7 +146,7 @@ const Register = ({setAlert}) => {
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder="" 
                             />
-                            <label htmlFor="name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nombre</label>
+                            <label htmlFor="name" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nombre</label>
                             {errors.name?.message && <span className='text-[#721c24]'>{errors.name?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
@@ -157,10 +157,10 @@ const Register = ({setAlert}) => {
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#d3850f] peer" 
                                     placeholder=""                                  
                             />
-                            <label htmlFor="lastname" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Apellido</label>
+                            <label htmlFor="lastname" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Apellido</label>
                             {errors.lastname?.message && <span className='text-[#721c24]'>{errors.lastname?.message}</span>}
                         </div>
-                        <div className="relative z-0 w-full mb-5 group">
+                        {/* <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="document"
                                     {...register("document")}
@@ -170,7 +170,7 @@ const Register = ({setAlert}) => {
                             />
                             <label htmlFor="document" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cedula/rif</label>
                             {errors.document?.message && <span className='text-[#721c24]'>{errors.document?.message}</span>}
-                        </div>
+                        </div> */}
                         <div className="relative z-0 w-full mb-5 group">
                             <input  type="text"
                                     name="email"
@@ -180,7 +180,7 @@ const Register = ({setAlert}) => {
                                     placeholder="" 
                                      
                             />
-                            <label htmlFor="email" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Correo</label>
+                            <label htmlFor="email" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Correo</label>
                             {errors.email?.message && <span className='text-[#721c24]'>{errors.email?.message}</span>}
                         </div>
                         <div className="relative z-0 w-full mb-5 group">
@@ -193,7 +193,7 @@ const Register = ({setAlert}) => {
                                     minLength="11"
                                     maxLength="11"
                             />
-                            <label htmlFor="phone" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Telefono</label>
+                            <label htmlFor="phone" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Telefono</label>
                             {errors.phone?.message && <span className='text-[#721c24]'>{errors.phone?.message}</span>}
                         </div>                        
                         <div className="relative z-0 w-full mb-5 group">
@@ -205,7 +205,7 @@ const Register = ({setAlert}) => {
                                     placeholder="" 
                                     minLength="6"
                             />
-                            <label htmlFor="password" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Contraseña</label>
+                            <label htmlFor="password" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Contraseña</label>
                             {errors.password?.message && <span className='text-[#721c24]'>{errors.password?.message}</span>}
                         </div>
                         <button type="submit" className="text-white bg-[#d3850f] hover:bg-[#943800] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Enviar</button>

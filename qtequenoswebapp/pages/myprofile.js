@@ -24,6 +24,7 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
       data : {},
       id : 0
     });
+    const [loadingListOrdes, setLoadingListOrdes] = useState(false);
     const [orderActuali, setOrderActuali]= useState(0);
     const [orderDetailActuali, setOrderDetailActuali]= useState(0);
     const [separatedProductsAndQuantity, setSeparatedProductsAndQuantity]= useState([]);
@@ -50,6 +51,10 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
       getListOrders(page);
     }
   }, [page])
+
+  useEffect(() => {
+    setLoadingListOrdes(true);
+  }, [listOrdes])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -103,6 +108,8 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
         },
         setAlert
       );
+
+      console.log(responseData)
 
       if(responseData){
           setListOrdes({
@@ -350,7 +357,7 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
                                   <a href="#" onClick={()=>{getOrderDetail(data.id);setShowModal(true)}} className="font-medium text-blue-600  hover:underline">Ver más</a>
                                 </td>                              
                             </tr>                          
-                        )}) : <tr><th>Cargando datos...</th><th>Cargando datos...</th><th>Cargando datos...</th><th>Cargando datos...</th></tr>
+                        )}) : Object.keys(listOrdes.data).length === 0 && !loadingListOrdes ? <tr><th>Cargando datos...</th><th>Cargando datos...</th><th>Cargando datos...</th><th>Cargando datos...</th></tr> : <tr><th></th><th></th><th></th><th></th></tr>
                     }
                   </tbody>
               </table>
@@ -360,7 +367,7 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
                     <Pagination
                       pagination={listOrdes.meta.pagination}
                     />
-                : <p>Cargando datos...</p>
+                : ""
               }
           </div>
         </div>
