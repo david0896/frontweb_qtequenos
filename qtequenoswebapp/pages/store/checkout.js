@@ -1,4 +1,5 @@
 import { useState, useEffect} from 'react';
+import Link from "next/link";
 import Layout from "@/components/layout";
 import MessagePrompt from '@/components/messagePrompt';
 import SuccessfullPayment from '@/components/successfullPayment';
@@ -12,7 +13,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-export default function Checkout({payMethods, alert, setAlert, shoppingCart, priceDelivery}) {
+export default function Checkout({payMethods, alert, setAlert, shoppingCart, priceDelivery, deleteOrderDB}) {
     const schema = yup.object().shape({
         email             : yup.string().trim().required('El campo es requerido').email('Ingrese un correo valido como: ejemplo@next.com'),
         amountTransferred : yup.number('El campo admite solo numeros').required('El campo es requerido')
@@ -318,6 +319,10 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
           )
     }
 
+    const deleteOrderOrderDatail = ()=>{
+        deleteOrderDB(orderDetail.order, orderDetail.id);
+    }
+
     return (
         <Layout 
             user={user}
@@ -392,7 +397,8 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                                             <label htmlFor="text" className={`${sinDelivery ? 'opacity-20' : ''} peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}>Nombre de quien recibe</label>
                                                         </div>
                                                     </div>
-                                                    <button type="submit" className={`bg-[#d3850f] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center`}>Confirmar datos de envío</button>
+                                                    
+                                                    <button type="submit" className={`bg-[#f5884d] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center`}>Confirmar datos de envío</button>
                                                 </form>    
                                             </div>                                  
                                         :formDirection ? 
@@ -427,15 +433,15 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                             Número del pedido <span className='text-xl font-semibold'>{orderDetail.order}</span>
                                         </h4>
                                         <div className='text-sm mb-5'>
-                                            <span className='block text-base font-medium'>Productos:</span>{orderDetail.productsAndQuantity.split(',').map((product, index)=>{return (<p key={index} className=' mb-2 border-b-[1px] border-solid border-gray-300'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'Precio: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}
+                                            <span className='block text-base font-medium'>Productos:</span>{orderDetail.productsAndQuantity.split(',').map((product, index)=>{return (<p key={index} className=' mb-2 border-b-[1px] border-solid border-gray-300'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 3 ? 'text-right': 'text-left'} block`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'Precio: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}
                                             {<p className=" text-right font-normal mt-2"> Subtotal: <span className="font-semibold">$ {orderDetail.totalPrice < 25 ? orderDetail.recipientsName !== "" ? (orderDetail.totalPrice - priceDelivery.data.attributes.parameterA) : orderDetail.totalPrice : orderDetail.totalPrice}</span></p>}
                                         </div>
-                                        {!sinDelivery || orderDetail.recipientsName !== "" ? orderDetail.totalPrice < 25 ?
+                                        {!sinDelivery || orderDetail.recipientsName !== "" ?
                                             <p className='text-sm mb-5 text-right'>
                                                 <span className='block text-base font-medium text-left'>Delivery:</span>
-                                                costo por envio: <span className=' font-medium'>$ {priceDelivery.data.attributes.parameterA}</span>
+                                                costo por envio: <span className=' font-medium'>$ {orderDetail.totalPrice < 25 ? priceDelivery.data.attributes.parameterA : 0}</span>
                                             </p>
-                                            : '' : ''
+                                            : ''
                                         }
                                         <div className='border-b-[1px] border-solid border-[#8e8e8e] text-lg font-medium flex justify-between'>
                                             Total a pagar: <span className='text-xl font-semibold'>$ {totalPriceDelivery}</span>
@@ -454,7 +460,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                                 <div className="flex items-center mb-4">
                                                     <input id="country-option-1" onClick={()=>{setBankReference(true);setZelleReference(false);setCashReference(false);setPayPointReference(false)}} type="radio" name="countries" value="pago movil" className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"/>
                                                     <label htmlFor="country-option-1" className="block ms-2  text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                        Pago movíl
+                                                        Pago móvíl
                                                     </label>
                                                 </div>
                                                 {bankReference ? 
@@ -492,7 +498,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                                             />
                                                             <label htmlFor="amountTransferred" className={`peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}>Monto transferido</label>
                                                         </div>
-                                                        <button type="submit" className={`bg-[#d3850f] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar pago</button>
+                                                        <button type="submit" className={`bg-[#f5884d] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar pago</button>
                                                     </form>
                                                 : ''}
                                                 <div className="flex items-center my-4">
@@ -527,7 +533,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                                             <label htmlFor="amountTransferred" className={`peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#d3850f] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}>Monto transferido</label>
                                                             {errors?.amountTransferred?.message && <span className='text-[#721c24]'>{errors?.amountTransferred?.message}</span>}
                                                         </div>
-                                                        <button type="submit" className={`bg-[#d3850f] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar pago</button>
+                                                        <button type="submit" className={`bg-[#f5884d] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar pago</button>
                                                     </form>
                                                 : ''}
                                                 <div className="flex items-center my-4">
@@ -538,7 +544,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                                 </div>
                                                 {cashReference ?
                                                     <form onSubmit={handleSubmitCashReference} className="flex items-center my-4">                                                   
-                                                        <button type="submit" className={`bg-[#d3850f] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar pago</button>
+                                                        <button type="submit" className={`bg-[#f5884d] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar pago</button>
                                                      </form>  
                                                 : ''} 
                                                 <div className="flex items-center my-4">
@@ -549,11 +555,14 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
                                                 </div>
                                                 {payPointReference ?
                                                     <form onSubmit={handleSubmitPayPointReference} className="flex items-center my-4">                                                   
-                                                        <button type="submit" className={`bg-[#d3850f] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar pago</button>
+                                                        <button type="submit" className={`bg-[#f5884d] hover:bg-[#943800] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}>Confirmar pago</button>
                                                      </form>  
                                                 : ''}                                           
                                             </div>: ''
                                         }
+                                    </div>
+                                    <div className='flex justify-end'>
+                                        <Link href="#" onClick={()=>deleteOrderOrderDatail()} className={`bg-[#f54d4d] hover:bg-[#b14040] text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 my-4 text-center`}>Cancelar pedido</Link>
                                     </div>
                                 </div>
                             </div>

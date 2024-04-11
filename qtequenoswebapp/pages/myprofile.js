@@ -11,19 +11,21 @@ import Modal from "@/components/modal";
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 
-const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
+const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery, deleteOrderDB}) => {
     const orderDetailCk = Cookies.get('orderDetailCk') ? JSON.parse(Cookies.get('orderDetailCk')) : {};
     const router = useRouter();
     const { page } = router.query;
 
-    const [ listOrdes, setListOrdes ] = useState({
+    const [listOrdes, setListOrdes] = useState({
       data : {},
       meta : {}
     });
-    const [ orderDetail, setOrderDetail ] = useState({
+    const [orderDetail, setOrderDetail] = useState({
       data : {},
-      id : 0
+      id : 0,
+      dataPayMethod : {}
     });
+    const [orderDetailChanged, setOrderDetailChanged] = useState(false);
     const [loadingListOrdes, setLoadingListOrdes] = useState(false);
     const [orderActuali, setOrderActuali]= useState(0);
     const [orderDetailActuali, setOrderDetailActuali]= useState(0);
@@ -44,6 +46,8 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
 
   useEffect(() => {
     setSeparatedProductsAndQuantity(String(orderDetail.data.productsAndQuantity).split(','));
+    setOrderDetailChanged(true);
+    console.log(orderDetail)
   }, [orderDetail])
 
   useEffect(() => {
@@ -109,8 +113,6 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
         setAlert
       );
 
-      console.log(responseData)
-
       if(responseData){
           setListOrdes({
             data : responseData.data,
@@ -120,7 +122,7 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
   }
 
   const getOrderDetail = async (idOrder)=>{
-
+    
     const responseData = await fetcher(
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/order-details?filters[order][$containsi]=${idOrder}`,
         {
@@ -136,56 +138,39 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
       if(responseData){
           setOrderDetail({
               data: responseData.data[0].attributes,
-              id: responseData.data[0].id
+              id: responseData.data[0].id,
+              dataPayMethod: {}
             }
           )
+          getPayMethod(idOrder);
       }
   }
 
-  const deleteOrderDB = async (idOrder)=>{
-
+  const getPayMethod = async (idOrder) => {
     const responseData = await fetcher(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/orders/${idOrder}`,
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${jwt}`,
-          },
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions?filters[order][$eqi]=${idOrder}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`,
         },
-        setAlert
-      );
+      },
+      setAlert
+    );
 
-      if(Object.keys(responseData).length !== 0 ){
-          deleteOrderDetailDb(orderDetailActuali);
-      }
-  }
-  
-  const deleteOrderDetailDb = async (idOrderDetail)=>{
+    if(Object.keys(responseData).length > 0){
+      setOrderDetail(prevState => ({
+        ...prevState,
+        dataPayMethod: Object.keys(responseData.data).length > 0 ? responseData.data[0].attributes : {},
+      }));
 
-    const responseData = await fetcher(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/order-details/${idOrderDetail}`,
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${jwt}`,
-          },
-        },
-        setAlert
-      );
-      if(Object.keys(responseData).length !== 0 ){
-          setAlert({
-              message: 'Pedido cancelado satisfactoriamente',
-              tipo: 2
-          })
-          Cookies.remove('orderDetailCk');
-          router.reload();
-      }
-  }
+      return;
+    }
+};
 
   const deleteOrderOrderDatail = ()=>{
-    deleteOrderDB(orderActuali);
+    deleteOrderDB(orderActuali, orderDetailActuali);
   }
 
   return (
@@ -376,21 +361,31 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery}) => {
         isVisible={showModal}
         onClose={()=>setShowModal(false)}
       >
-        <h1 className="text-lg font-semibold mb-3">Detalles del pedido nº {orderDetail.data.order}</h1>
-        <div className="flex flex-col h-[90%] space-y-5">
-          <div className="mt-6 overflow-hidden overflow-y-scroll p-3">
-            {String(orderDetail.data.productsAndQuantity).split(',').map((product, index)=>{return (<p key={index} className='mb-2'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 0 ? 'block' : index === 3 ? 'block text-right': 'inline-flex'}`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'Precio: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}      
-            {<p className=" text-right font-normal mt-2"> Subtotal: <span className="font-semibold">$ {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" ? (orderDetail.data.totalPrice - priceDelivery) : orderDetail.data.totalPrice : orderDetail.data.totalPrice}</span></p>}
-            {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" ? <p className=" flex justify-between mt-2">Delivery: <span>$ {priceDelivery}</span></p> : '' : ''}
-          </div>
-          <div className="mt-auto">
-            <div className="border-[1px] border-[#cfcfcf] rounded-md p-3 flex justify-end">
-              <p className="text-right lg:text-left">Total: 
-                <span className=" font-semibold"> ${orderDetail.data.totalPrice}</span>
-              </p>
+        {Object.keys(orderDetail.data).length > 0 &&
+          <div>
+            <h1 className="text-lg font-semibold mb-3">Detalles del pedido nº {orderDetail.data.order}</h1>
+            <div className="flex flex-col h-[90%] space-y-5">
+              <div className="mt-6 overflow-hidden overflow-y-scroll p-3">
+                <div className="flex justify-between py-4 border-b-[1px] mb-4 border-[#cfcfcf]">
+                  <h3 className=" ml-1 font-medium">Metodo de pago</h3>
+                 {orderDetailChanged &&
+                    <span>{`${Object.keys(orderDetail.dataPayMethod).length <= 0 ? 'Por confirmar' : orderDetail.dataPayMethod.bank !== null  ? 'Pago móvil' : orderDetail.dataPayMethod.cash !== false ? 'Efectivo': orderDetail.dataPayMethod.zelleEmail !== null ? 'Zelle' : orderDetail.dataPayMethod.payPoints !== false ? 'Q`puntos': 'Por confirmar'}`}</span>
+                  }
+                </div>
+                {String(orderDetail.data.productsAndQuantity).split(',').map((product, index)=>{return (<p key={index} className='mb-2'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 3 ? 'text-right': ''} block`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'Precio: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}      
+                {<p className=" text-right font-normal mt-2"> Subtotal: <span className="font-semibold">$ {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" ? (orderDetail.data.totalPrice - priceDelivery) : orderDetail.data.totalPrice : orderDetail.data.totalPrice}</span></p>}
+                {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" ? <p className=" flex justify-between mt-2">Delivery: <span>$ {priceDelivery}</span></p> : '' : ''}
+              </div>
+              <div className="mt-auto">
+                <div className="border-[1px] border-[#cfcfcf] rounded-md p-3 flex justify-end">
+                  <p className="text-right lg:text-left">Total: 
+                    <span className=" font-semibold"> ${orderDetail.data.totalPrice}</span>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        }
       </Modal>        
     </Layout>
   )
