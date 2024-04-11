@@ -365,7 +365,7 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery, deleteOrderDB}
           <div>
             <h1 className="text-lg font-semibold mb-3">Detalles del pedido nº {orderDetail.data.order}</h1>
             <div className="flex flex-col h-[90%] space-y-5">
-              <div className="mt-6 overflow-hidden overflow-y-scroll p-3">
+              <div className="mt-6 overflow-hidden overflow-y-scroll h-[17rem] p-3">
                 <div className="flex justify-between py-4 border-b-[1px] mb-4 border-[#cfcfcf]">
                   <h3 className=" ml-1 font-medium">Metodo de pago</h3>
                  {orderDetailChanged &&
@@ -374,7 +374,7 @@ const Myprofile = ({shoppingCart, alert, setAlert, priceDelivery, deleteOrderDB}
                 </div>
                 {String(orderDetail.data.productsAndQuantity).split(',').map((product, index)=>{return (<p key={index} className='mb-2'>{product.split(':').map((productDescription, index)=>{return(<span key={index} className={`${index === 3 ? 'text-right': ''} block`}><span className=' ml-1'>{index === 1 ? 'Precio unitario: $' : index === 2 ? 'Cantidad:' : index === 3 ? 'Precio: $' : ''}</span><span className={`${index !== 0 ? 'ml-1 font-medium' : ''}`}>{productDescription}</span></span>)})}</p> )})}      
                 {<p className=" text-right font-normal mt-2"> Subtotal: <span className="font-semibold">$ {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" ? (orderDetail.data.totalPrice - priceDelivery) : orderDetail.data.totalPrice : orderDetail.data.totalPrice}</span></p>}
-                {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" ? <p className=" flex justify-between mt-2">Delivery: <span>$ {priceDelivery}</span></p> : '' : ''}
+                {<p className=" flex justify-between mt-2">Delivery: <span>$ {orderDetail.data.totalPrice < 25 ? orderDetail.data.recipientsName !== "" ? priceDelivery : 0 : 0}</span></p> }
               </div>
               <div className="mt-auto">
                 <div className="border-[1px] border-[#cfcfcf] rounded-md p-3 flex justify-end">

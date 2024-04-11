@@ -151,7 +151,7 @@ export default function ShoppingCart({shoppingCart, setShoppingCart, updateQuant
                 <MessagePrompt/>
                 <div className={styles.contenido}>
                     <div className={styles.carrito}>
-                        <h2 className='text-lg font-bold'>Articulos</h2>
+                        <h2 className='text-lg font-bold'>Artículos</h2>
                         {shoppingCart.length === 0 ? 'No hay aproductos en tu carrito todavía' : (
                             shoppingCart.map((product, index)=> (
                                 <div 
