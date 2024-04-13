@@ -100,7 +100,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
 
     const handleSubmitBankReference = async (e) => {
         e.preventDefault();
-        setRecordPoints();
+        // setRecordPoints();
         const responseData = await fetcher(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions`,
           {
@@ -141,7 +141,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
     const handleSubmitZelleReference = async zelleData => {
         try {
             if(zelleData){
-                setRecordPoints();
+                // setRecordPoints();
                 const responseData = await fetcher(
                 `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions`,
                 {
@@ -179,7 +179,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
 
     const handleSubmitCashReference = async (e) => {
         e.preventDefault();
-        setRecordPoints();
+        // setRecordPoints();
         const responseData = await fetcher(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions`,
           {
@@ -219,7 +219,7 @@ export default function Checkout({payMethods, alert, setAlert, shoppingCart, pri
             return;
         }
 
-        setRecordPoints();
+        // setRecordPoints();
 
         const responseData = await fetcher(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/transactions`,
