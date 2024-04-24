@@ -11,7 +11,7 @@ export default function App({ Component, pageProps }) {
   const shoppingCartLs = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('shoppingCart')) ?? []: [];
   const [shoppingCart, setShoppingCart] = useState(shoppingCartLs);
   const [readyPage, setReadyPage] = useState(false);
-  const [maintenance, setMaintenance] = useState(true);
+  const [maintenance, setMaintenance] = useState(false);
   const [alert, setAlert] = useState({});
   const [total, setTotal] = useState(0);
   const [totalPoints, setTotalPoints] = useState(0);
